@@ -1,11 +1,15 @@
-import { Button } from "@/components/ui/button"
-import {UserButton} from "@clerk/nextjs"
+"use client"
+
+import { Modal } from "@/components/ui/modal"
+import { UserButton } from "@clerk/nextjs"
 
 export default function Home() {
     return (
-        <div>
+        <div className="p-4">
 
-            <UserButton afterSignOutUrl="/" />
+            <Modal title ="Test" description="Ceci est un test du modal" isOpen onClose={ () => {} }>
+                Ici les enfants
+            </Modal>
 
         </div>
     )
