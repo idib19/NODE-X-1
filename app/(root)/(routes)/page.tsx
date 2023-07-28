@@ -14,13 +14,7 @@ const SetupPage = () => {
         }
     }, [isOpen, onOpen]);
 
-    return (
-        <div className="p-4">
-
-            Page Source
-
-        </div>
-    )
+    return null;
 }
 
 
