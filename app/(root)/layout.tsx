@@ -24,9 +24,15 @@ export default async function SetupLayout({
     }
 
     return (
-        <>
+        <div>
+
+        
         {children}
-        </>
+
+        
+        </div>
+
+
     );
 
 };
