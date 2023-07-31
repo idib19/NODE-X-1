@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
+// Ce composant Navbar  est celui qui porte les bouttons de navigations pour chaque boutique
 export function MainNav({
     className,
     ...props
@@ -28,9 +29,7 @@ export function MainNav({
                     className={cn("text-sm font-medium transition-colors hover:text-primary",
                         route.active ? "text-black dark:text-white" : "text-muted-foreground")}
                 >
-                    
                     {route.label}
-
                 </Link>
             ))}
         </nav>

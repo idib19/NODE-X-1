@@ -19,6 +19,9 @@ interface StoreSwitcherProps extends PopoverTriggerProps {
     items: Store[];
 };
 
+
+// Ce composant est le ui (combobox) qui sert pour changer d'une boutique a une autre
+//Il est compose d'un ensemble de composants venant des librairies ui de chadCn. 
 export default function StoreSwitcher({
     className,
     items = []
@@ -32,6 +35,8 @@ export default function StoreSwitcher({
         value: item.id
     }));
 
+    // Cette variable permet de stocker la valeur de la boutique active actuelle
+    // ca verifie si la valeur du store actuel est identique a celui de l'url
     const currentStore = formattedItems.find((item) => item.value === params.storeId);
 
     const [open, setOpen] = useState(false);
@@ -51,33 +56,35 @@ export default function StoreSwitcher({
 
                     {currentStore?.label}
 
-                    <ChevronsUpDown className="ml-auto h-4 w-4 shrink=0 opacity-50" />
+                    <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
 
                 </Button>
 
             </PopoverTrigger>
-            <PopoverContent className="w-[2000px] p-0">
+            <PopoverContent className="w-[200px] p-0">
                 <Command>
                     <CommandList>
-                        <CommandInput placeholder="search store..." />
+                        <CommandInput placeholder="Search Store..." />
                         <CommandEmpty>
-                            No Store found
+                            Pas de boutique a ce nom.
                         </CommandEmpty>
                         <CommandGroup heading="Stores">
                             {formattedItems.map((store) => (
                                 <CommandItem key={store.value}
                                     onSelect={() => onStoreSelect(store)}
-                                    className="text-sm">
+                                    className="text-sm"
+                                >
 
                                     <StoreIcon className="mr-2 h-4 w-4" />
                                     {store.label}
-                                    <Check
-                                        className={ cn ("ml-auto h-4 w-4",
-                                            currentStore?.value === store.value
-                                            ? "opacity-100" 
-                                            : "opacity-0"
-                                        )}
-                                    />
+                                   <Check 
+                                   className={cn (
+                                    "ml-auto h-4 w-4",
+                                    currentStore?.value === store.value
+                                    ? "opacity-100"
+                                    : "opacity-0"                                
+                                   )}
+                                   />
                                 </CommandItem>
                             ))}
                         </CommandGroup>
@@ -90,7 +97,6 @@ export default function StoreSwitcher({
                                     setOpen(false)
                                     storeModal.onOpen()
                                 }}>
-
 
                                 <PlusCircle className="mr-2 h-5 w-5" />
                                 Create Store
