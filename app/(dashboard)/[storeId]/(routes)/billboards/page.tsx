@@ -3,10 +3,6 @@ import { BillboardClient } from "./components/client";
 
 
 
-
-
-
-
 const BillboardsPage = () => {
 
     return (
