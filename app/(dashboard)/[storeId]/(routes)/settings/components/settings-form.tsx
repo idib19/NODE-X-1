@@ -41,7 +41,7 @@ export const SettingsForm: React.FC<SettingsProps> = ({ initialData }) => {
     const params = useParams();
     const router = useRouter();
     const origin = useOrigin();
-    
+
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -134,7 +134,10 @@ export const SettingsForm: React.FC<SettingsProps> = ({ initialData }) => {
             </Form>
 
             <Separator />
-            <ApiAlert title="NEXT_PUBLIC_API_URL" description={`${origin}/api/${params.storeId}`} variant="public" />
+            <ApiAlert title="NEXT_PUBLIC_API_URL"
+                description={`${origin}/api/${params.storeId}`}
+                variant="public"
+            />
         </>
 
     )
