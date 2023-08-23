@@ -16,3 +16,5 @@ const BillboardPage = async ({ params }: { params: { billboardId: string } }) =>
         </div>
     ))
 }
+
+
