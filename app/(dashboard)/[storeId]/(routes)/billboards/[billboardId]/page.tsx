@@ -18,3 +18,4 @@ const BillboardPage = async ({ params }: { params: { billboardId: string } }) =>
 }
 
 
+export default BillboardPage;
