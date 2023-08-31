@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import axios from "axios";
 import { useState } from "react";
@@ -14,29 +14,30 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { CategoryColumn } from "./columns"
 import { AlertModal } from "@/components/modals/alert-modals";
 
+import { CategoryColumn } from "./columns";
 
 interface CellActionProps {
     data: CategoryColumn;
 }
 
-export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-
+export const CellAction: React.FC<CellActionProps> = ({
+    data,
+}) => {
     const router = useRouter();
     const params = useParams();
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const onConfirm = async () => {
+    const onDelete = async () => {
         try {
             setLoading(true);
-            await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
-            toast.success('Billboard deleted.');
+            await axios.delete(`/api/${params.storeId}/categories/${data.id}`);
+            toast.success('Category deleted.');
             router.refresh();
         } catch (error) {
-            toast.error('Make sure you removed all categories using this billboard first.');
+            toast.error('Make sure you removed all products using this category first.');
         } finally {
             setOpen(false);
             setLoading(false);
@@ -45,14 +46,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
     const onCopy = (id: string) => {
         navigator.clipboard.writeText(id);
-        toast.success('Billboard ID copied to clipboard.');
+        toast.success('Category ID copied to clipboard.');
     }
+
     return (
         <>
             <AlertModal
                 isOpen={open}
                 onClose={() => setOpen(false)}
-                onConfirm={onConfirm}
+                onConfirm={onDelete}
                 loading={loading}
             />
             <DropdownMenu>
@@ -61,6 +63,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                         <span className="sr-only">Open menu</span>
                         <MoreHorizontal className="h-4 w-4" />
                     </Button>
+                    
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
@@ -70,7 +73,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                         <Copy className="mr-2 h-4 w-4" /> Copy Id
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                        onClick={() => router.push(`/${params.storeId}/billboards/${data.id}`)}
+                        onClick={() => router.push(`/${params.storeId}/categories/${data.id}`)}
                     >
                         <Edit className="mr-2 h-4 w-4" /> Update
                     </DropdownMenuItem>
@@ -82,5 +85,5 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                 </DropdownMenuContent>
             </DropdownMenu>
         </>
-    )
-}
+    );
+};
