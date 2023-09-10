@@ -4,13 +4,8 @@ import prismadb from "@/lib/prismadb";
 import Navbar from "@/components/navbar";
 
 
-export default async function DashboardLayout({
-    children,
-    params
-}: {
-    children: React.ReactNode;
-    params: { storeId: string }
-}) {
+export default async function DashboardLayout({ children, params }: { children: React.ReactNode; params: { storeId: string } }) {
+
     const { userId } = auth();
 
     if (!userId) {
@@ -30,7 +25,7 @@ export default async function DashboardLayout({
 
     return (
         <>
-            <Navbar/>
+            <Navbar />
             {children}
         </>
     )
