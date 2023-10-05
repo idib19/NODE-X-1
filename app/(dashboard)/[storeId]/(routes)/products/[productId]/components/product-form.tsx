@@ -23,9 +23,9 @@ import {
 } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import { Heading } from "@/components/ui/heading"
-import { AlertModal } from "@/components/modals/alert-modal"
+import { AlertModal } from "@/components/modals/alert-modals"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import ImageUpload from "@/components/ui/image-upload"
+import ImageUpload from "@/components/ui/ImageUpload"
 import { Checkbox } from "@/components/ui/checkbox"
 
 const formSchema = z.object({
@@ -121,13 +121,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   return (
     <>
-    <AlertModal 
-      isOpen={open} 
-      onClose={() => setOpen(false)}
-      onConfirm={onDelete}
-      loading={loading}
-    />
-     <div className="flex items-center justify-between">
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+        loading={loading}
+      />
+      <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
           <Button
@@ -150,9 +150,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormItem>
                 <FormLabel>Images</FormLabel>
                 <FormControl>
-                  <ImageUpload 
-                    value={field.value.map((image) => image.url)} 
-                    disabled={loading} 
+                  <ImageUpload
+                    value={field.value.map((image) => image.url)}
+                    disabled={loading}
                     onChange={(url) => field.onChange([...field.value, { url }])}
                     onRemove={(url) => field.onChange([...field.value.filter((current) => current.url !== url)])}
                   />
