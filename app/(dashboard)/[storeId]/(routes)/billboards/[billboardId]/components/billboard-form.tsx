@@ -27,7 +27,7 @@ const formSchema = z.object({
     imageUrl: z.string().min(1),
 });
 
-// formschema est passe a la variable BillboardFormValues avec zod.infer
+// formschema est passe au type BillboardFormValues avec zod.infer
 type BillboardFormValues = z.infer<typeof formSchema>;
 
 // interface typescript : 
@@ -59,6 +59,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => 
             imageUrl: ''
         }
     });
+
     const onSubmit = async (data: BillboardFormValues) => {
         try {
             setLoading(true);
