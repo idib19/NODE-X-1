@@ -4,12 +4,14 @@ import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import prismadb from "@/lib/prismadb";
 
+// ??? 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
+// WHAT IS AN OPTIONS REQUEST ?
 export async function OPTIONS() {
     return NextResponse.json({}, { headers: corsHeaders });
 }
@@ -32,7 +34,7 @@ export async function POST(
         }
     });
 
-    const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+    const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = []; // ???
 
     products.forEach((product) => {
         line_items.push({
@@ -63,6 +65,13 @@ export async function POST(
         }
     });
 
+
+
+
+
+    
+
+    // What is a stripe session ? 
     const session = await stripe.checkout.sessions.create({
         line_items,
         mode: 'payment',

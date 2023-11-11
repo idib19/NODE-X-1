@@ -20,11 +20,13 @@ const Navbar = async () => {
         },
     })
 
+    // State for handling displying of menu icon on small screens 
      
     return (
         <div className="border-b">
             <div className="flex h-16 items-center px-4">
                 <StoreSwitcher items={stores}/>
+                 {/* Main Nav or menu icon displying conditionnaly  */}
                 <MainNav className="mx-6"/>
                 <div className="ml-auto flex items-center space-x-4">
                     <UserButton afterSignOutUrl="/" />
