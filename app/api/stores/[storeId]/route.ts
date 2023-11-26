@@ -26,10 +26,11 @@ export async function PATCH(
       return new NextResponse("Store id is required", { status: 400 });
     }
 
+    // checking the role and authorix=zation
     const store = await prismadb.store.updateMany({
       where: {
         id: params.storeId,
-        userId,
+        
       },
       data: {
         name
@@ -59,10 +60,11 @@ export async function DELETE(
       return new NextResponse("Store id is required", { status: 400 });
     }
 
+    // checking the role and authorix=zation
     const store = await prismadb.store.deleteMany({
       where: {
         id: params.storeId,
-        userId
+        
       }
     });
   

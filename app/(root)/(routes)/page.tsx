@@ -17,5 +17,6 @@ const SetupPage = () => {
     return null;
 }
 
+//  what is this file doing exactly ?????? //
 
 export default SetupPage;

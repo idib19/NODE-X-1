@@ -45,7 +45,7 @@ export async function DELETE(
     if (!params.productId) {
       return new NextResponse("Product id is required", { status: 400 });
     }
-
+    // validation function - midleware here !!! it checks the token roles and permissions validity
     const storeByUserId = await prismadb.store.findFirst({
       where: {
         id: params.storeId,

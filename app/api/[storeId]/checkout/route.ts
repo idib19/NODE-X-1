@@ -16,10 +16,8 @@ export async function OPTIONS() {
     return NextResponse.json({}, { headers: corsHeaders });
 }
 
-export async function POST(
-    req: Request,
-    { params }: { params: { storeId: string } }
-) {
+export async function POST(req: Request, { params }: { params: { storeId: string } }) {
+
     const { productIds } = await req.json();
 
     if (!productIds || productIds.length === 0) {
@@ -69,7 +67,7 @@ export async function POST(
 
 
 
-    
+
 
     // What is a stripe session ? 
     const session = await stripe.checkout.sessions.create({

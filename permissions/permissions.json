@@ -1,0 +1,24 @@
+{
+    "roles": {
+        "admin": {
+            "permissions": [
+                "manageUsers",
+                "manageStores",
+                "viewAnalytics"
+            ]
+        },
+        "storeManager": {
+            "permissions": [
+                "manageProducts",
+                "viewOrders",
+                "storeManagerAccess"
+            ]
+        },
+        "customer": {
+            "permissions": [
+                "viewProducts",
+                "placeOrder"
+            ]
+        }
+    }
+}

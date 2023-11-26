@@ -30,10 +30,11 @@ export async function POST(
             return new NextResponse("Store Id is required", { status: 400 });
         }
 
+        // to modify , midleware function instead for validation 
         const getStoreByUserId = await prismadb.store.findFirst({
             where: {
                 id: params.storeId,
-                userId
+                
             }
         })
 

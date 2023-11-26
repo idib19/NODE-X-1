@@ -18,10 +18,11 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
         redirect('/sign-in')
     }
 
+    // checking the role and authorix=zation
     const store = await prismadb.store.findFirst({
         where: {
             id: params.storeId,
-            userId
+            
         }
     })
 
