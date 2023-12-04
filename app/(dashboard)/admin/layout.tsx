@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs";
 import prismadb from "@/lib/prismadb";
-import Navbar from "@/components/navbar";
+import AdminNavbar from "@/components/admin-components/admin-navbar";
 
 export default async function DashboardLayout({ children, params }: { children: React.ReactNode; params: { storeId: string } }) {
 
@@ -28,16 +28,17 @@ export default async function DashboardLayout({ children, params }: { children: 
 
 
     //logic admin access his dashboard  because is  his admin and have the rigth access role !
-    if ({/*auth=> true*/ }) {
-        redirect('/');
-    }
+    // if ({/*auth=> true*/ }) {
+    //     redirect('/');
+    // }
 
 
     return (
         <>
-            {/*admin navber*/}
+            <AdminNavbar />
 
             {children}
+
         </>
     )
 }

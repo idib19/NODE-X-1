@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import permissions from "@/permissions/permissions.json"; // Import your permissions file
 
 // Define the UserRole type
-type UserRole = "admin" | "storeManager" | "customer";
+type UserRole = "admin" | "storeManager" | "debugger";
 
 export default async function SetupLayout({
     children
@@ -45,7 +45,7 @@ export default async function SetupLayout({
     // Flow for Admin
     if (userRole === 'admin' && userPermissions.includes('adminAccess')) {
         // Create session cookie here (if needed)
-        redirect('/admin/');
+        redirect('/admin');
         return;
     }
 
@@ -68,7 +68,6 @@ export default async function SetupLayout({
         if (store) {
             // Create session cookie here (if needed)
             redirect(`/store/${store.id}`);
-            return;
         }
     }
 

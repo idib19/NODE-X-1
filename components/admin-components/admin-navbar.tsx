@@ -2,12 +2,13 @@ import { UserButton, auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import prismadb from "@/lib/prismadb";
 
-import { MainNav } from "@/components/main-nav";
+import { AdminMainNav } from "@/components/admin-components/admin-main-nav";
 import StoreSwitcher from "@/components/store-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { data } from "autoprefixer";
 
 
-const Navbar = async () => {
+const adminNavbar = async () => {
 
     const { userId } = auth();
 
@@ -15,34 +16,22 @@ const Navbar = async () => {
         redirect("/sign-in");
     }
 
-    const user = await prismadb.user.findFirst({
-        where: {
-            id: userId
-        }
-    });
-
     // retrieving data (should add some security chek, jwt migth be more efficient)
     // than always calling the database to tchek actions and shit 
-    const store = await prismadb.store.findFirst({
-        where: {
-            id: user.storeId,
-            users: {
-                some: {
-                    id: userId
-                }
-            }
-        }
-    });
+    const stores = await prismadb.store.findMany({
+
+    })
 
     // State for handling responsive menu on small screens 
 
     return (
         <div className="border-b">
             <div className="flex h-16 items-center px-4">
+                <StoreSwitcher items={stores} />
 
-                {store?.name}
+                
+                <AdminMainNav className="mx-6" />
 
-                <MainNav className="mx-6" />
                 <div className="ml-auto flex items-center space-x-4">
                     <ThemeToggle />
                     <UserButton afterSignOutUrl="/" />
@@ -52,4 +41,4 @@ const Navbar = async () => {
     )
 }
 
-export default Navbar;
+export default adminNavbar;

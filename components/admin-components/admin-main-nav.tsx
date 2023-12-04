@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
 // Ce composant Navbar  est celui qui porte les bouttons de navigations pour chaque boutique
-export function MainNav({
+export function AdminMainNav({
     className,
     ...props
 }: React.HtmlHTMLAttributes<HTMLElement>) {
@@ -55,7 +55,7 @@ export function MainNav({
     ];
 
     return (
-    
+
         <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)}>
             {routes.map((route) => (
                 <Link
@@ -68,6 +68,6 @@ export function MainNav({
                 </Link>
             ))}
         </nav>
-        
+
     )
 };

@@ -2,22 +2,22 @@
     "roles": {
         "admin": {
             "permissions": [
-                "manageUsers",
-                "manageStores",
+                "manageAll",
+                "adminAccess",
                 "viewAnalytics"
             ]
         },
         "storeManager": {
             "permissions": [
-                "manageProducts",
-                "viewOrders",
+                "client",
+                "managerOfStore",
                 "storeManagerAccess"
             ]
         },
-        "customer": {
+        "debugger": {
             "permissions": [
-                "viewProducts",
-                "placeOrder"
+                "view error logs",
+                "viewstore"
             ]
         }
     }
