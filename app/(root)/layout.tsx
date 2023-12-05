@@ -17,7 +17,6 @@ export default async function SetupLayout({
     // Redirect unauthenticated users to the sign-in page
     if (!userId) {
         redirect('/sign-in');
-        return;
     }
 
 
@@ -31,7 +30,6 @@ export default async function SetupLayout({
     // Redirect if the user is not found in the database
     if (!user) {
         redirect('/landing-page'); // Adjust the redirect URL as needed
-        return;
     }
 
     // Ensure the userRole is a valid UserRole
@@ -46,7 +44,6 @@ export default async function SetupLayout({
     if (userRole === 'admin' && userPermissions.includes('adminAccess')) {
         // Create session cookie here (if needed)
         redirect('/admin');
-        return;
     }
 
     // Flow for Store Manager + // don't need to check permissions at this point I think

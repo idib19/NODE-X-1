@@ -23,7 +23,7 @@ export async function GET(
         color: true,
       }
     });
-  
+
     return NextResponse.json(product);
   } catch (error) {
     console.log('[PRODUCT_GET]', error);
@@ -46,14 +46,21 @@ export async function DELETE(
       return new NextResponse("Product id is required", { status: 400 });
     }
     // validation function - midleware here !!! it checks the token roles and permissions validity
-    const storeByUserId = await prismadb.store.findFirst({
+    // we should set up a validation function here scalable and efficient. using
+    // using either tokens. cessions or basic permissions checking
+
+    const isAuthorised = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
-        userId
+        users: {
+          some: {
+            id: userId
+          }
+        }
       }
     });
 
-    if (!storeByUserId) {
+    if (!isAuthorised) {
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
@@ -62,7 +69,7 @@ export async function DELETE(
         id: params.productId
       },
     });
-  
+
     return NextResponse.json(product);
   } catch (error) {
     console.log('[PRODUCT_DELETE]', error);
@@ -114,14 +121,18 @@ export async function PATCH(
       return new NextResponse("Size id is required", { status: 400 });
     }
 
-    const storeByUserId = await prismadb.store.findFirst({
+    const isAuthorised = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
-        userId
+        users: {
+          some: {
+            id: userId
+          }
+        }
       }
     });
 
-    if (!storeByUserId) {
+    if (!isAuthorised) {
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
@@ -157,7 +168,7 @@ export async function PATCH(
         },
       },
     })
-  
+
     return NextResponse.json(product);
   } catch (error) {
     console.log('[PRODUCT_PATCH]', error);
