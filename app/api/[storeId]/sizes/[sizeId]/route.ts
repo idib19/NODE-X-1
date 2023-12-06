@@ -17,7 +17,7 @@ export async function GET(
         id: params.sizeId
       }
     });
-  
+
     return NextResponse.json(size);
   } catch (error) {
     console.log('[SIZE_GET]', error);
@@ -40,14 +40,18 @@ export async function DELETE(
       return new NextResponse("Size id is required", { status: 400 });
     }
 
-    const storeByUserId = await prismadb.store.findFirst({
+    const isAuthorised = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
-        userId
+        users: {
+          some: {
+            id: userId
+          }
+        }
       }
     });
 
-    if (!storeByUserId) {
+    if (!isAuthorised) {
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
@@ -56,7 +60,7 @@ export async function DELETE(
         id: params.sizeId
       }
     });
-  
+
     return NextResponse.json(size);
   } catch (error) {
     console.log('[SIZE_DELETE]', error);
@@ -93,14 +97,18 @@ export async function PATCH(
       return new NextResponse("Size id is required", { status: 400 });
     }
 
-    const storeByUserId = await prismadb.store.findFirst({
+    const isAuthorised = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
-        userId
+        users: {
+          some: {
+            id: userId
+          }
+        }
       }
     });
 
-    if (!storeByUserId) {
+    if (!isAuthorised) {
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
@@ -113,7 +121,7 @@ export async function PATCH(
         value
       }
     });
-  
+
     return NextResponse.json(size);
   } catch (error) {
     console.log('[SIZE_PATCH]', error);

@@ -43,7 +43,7 @@ export async function POST( req: Request,{ params }: { params: { storeId: string
       return new NextResponse("Store id is required", { status: 400 });
     }
 
-    const storeByUserId = await prismadb.store.findFirst({
+    const isAuthorised = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
         users: {
@@ -54,7 +54,7 @@ export async function POST( req: Request,{ params }: { params: { storeId: string
       }
     });
 
-    if (!storeByUserId) {
+    if (!isAuthorised) {
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
@@ -84,6 +84,8 @@ export async function POST( req: Request,{ params }: { params: { storeId: string
     return new NextResponse("Internal error", { status: 500 });
   }
 };
+
+
 
 export async function GET(
   req: Request,
