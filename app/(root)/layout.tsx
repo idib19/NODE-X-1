@@ -14,11 +14,9 @@ export default async function SetupLayout({
 
     const { userId } = auth();
 
-    // Redirect unauthenticated users to the sign-in page
     if (!userId) {
         redirect('/sign-in');
     }
-
 
     // Retrieve the user's data from the database
     const user = await prismadb.user.findFirst({

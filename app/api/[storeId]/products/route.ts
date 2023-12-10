@@ -2,18 +2,28 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 
 import prismadb from '@/lib/prismadb';
+import { isAuthorised } from '@/permissions/checkStorePermission';
 
-export async function POST( req: Request,{ params }: { params: { storeId: string } }) {
+
+export async function POST(req: Request, { params }: { params: { storeId: string } }) {
   try {
     const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 403 });
+    }
+
+    const havePermission = await isAuthorised(params.storeId, userId)
+
+    if (!havePermission) {
+      return new NextResponse("Unauthorized", { status: 405 });
+    }
+
 
     const body = await req.json();
 
     const { name, price, categoryId, colorId, sizeId, images, isFeatured, isArchived } = body;
 
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 403 });
-    }
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
@@ -43,20 +53,7 @@ export async function POST( req: Request,{ params }: { params: { storeId: string
       return new NextResponse("Store id is required", { status: 400 });
     }
 
-    const isAuthorised = await prismadb.store.findFirst({
-      where: {
-        id: params.storeId,
-        users: {
-          some : {
-            id : userId
-          }
-        }
-      }
-    });
 
-    if (!isAuthorised) {
-      return new NextResponse("Unauthorized", { status: 405 });
-    }
 
     const product = await prismadb.product.create({
       data: {
@@ -77,7 +74,7 @@ export async function POST( req: Request,{ params }: { params: { storeId: string
         },
       },
     });
-  
+
     return NextResponse.json(product);
   } catch (error) {
     console.log('[PRODUCTS_POST]', error);
@@ -121,7 +118,7 @@ export async function GET(
         createdAt: 'desc',
       }
     });
-  
+
     return NextResponse.json(products);
   } catch (error) {
     console.log('[PRODUCTS_GET]', error);
