@@ -1,60 +1,55 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
-
 import prismadb from '@/lib/prismadb';
-import { isAuthorised } from '@/permissions/checkStorePermission';
-
+import { validateRequestAndAuthorize } from '@/permissions/checkStorePermission';
+import validator from 'validator';
 
 export async function POST(req: Request, { params }: { params: { storeId: string } }) {
   try {
     const { userId } = auth();
+    const validateRequest = await validateRequestAndAuthorize(params.storeId, userId!, params.storeId)
 
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 403 });
+    if (validateRequest.error) {
+      return NextResponse.json({ error: validateRequest.error }, { status: validateRequest.status });
     }
 
-    const havePermission = await isAuthorised(params.storeId, userId)
-
-    if (!havePermission) {
-      return new NextResponse("Unauthorized", { status: 405 });
+    // Sanitize and Validate storeId
+    const sanitizedStoreId = validator.trim(validator.escape(params.storeId));
+    if (!validator.isUUID(sanitizedStoreId)) {
+      return new NextResponse("Invalid store id format", { status: 400 });
     }
-
 
     const body = await req.json();
+    let { name, price, categoryId, colorId, sizeId, images, isFeatured, isArchived } = body;
 
-    const { name, price, categoryId, colorId, sizeId, images, isFeatured, isArchived } = body;
+    // Validate and Sanitize name
+    if (typeof name !== "string") {
+      return new NextResponse("Name must be a string", { status: 400 });
+    }
+    name = validator.trim(validator.escape(name));
 
+    // Validate price
+    if (typeof price !== "number" || isNaN(price) || price < 0) {
+      return new NextResponse("Invalid price: must be a non-negative number", { status: 400 });
+    }
+    // Sanitize and Validate UUIDs: categoryId, colorId, sizeId
+    [categoryId, colorId, sizeId].forEach(id => {
+      if (!validator.isUUID(id)) {
+        throw new Error("Invalid ID format");
+      }
+    });
 
-    if (!name) {
-      return new NextResponse("Name is required", { status: 400 });
+    // Validate images
+    if (!Array.isArray(images) || images.some(image => typeof image.url !== "string")) {
+      return new NextResponse("Invalid images format", { status: 400 });
     }
 
-    if (!images || !images.length) {
-      return new NextResponse("Images are required", { status: 400 });
+    // Validate booleans: isFeatured, isArchived
+    if (typeof isFeatured !== "boolean" || typeof isArchived !== "boolean") {
+      return new NextResponse("Invalid boolean fields", { status: 400 });
     }
 
-    if (!price) {
-      return new NextResponse("Price is required", { status: 400 });
-    }
-
-    if (!categoryId) {
-      return new NextResponse("Category id is required", { status: 400 });
-    }
-
-    if (!colorId) {
-      return new NextResponse("Color id is required", { status: 400 });
-    }
-
-    if (!sizeId) {
-      return new NextResponse("Size id is required", { status: 400 });
-    }
-
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
-
-
-
+    // Create product
     const product = await prismadb.product.create({
       data: {
         name,
@@ -64,12 +59,10 @@ export async function POST(req: Request, { params }: { params: { storeId: string
         categoryId,
         colorId,
         sizeId,
-        storeId: params.storeId,
+        storeId: sanitizedStoreId,
         images: {
           createMany: {
-            data: [
-              ...images.map((image: { url: string }) => image),
-            ],
+            data: images.map(image => ({ url: image.url })),
           },
         },
       },

@@ -42,35 +42,35 @@ export async function isAuthorised(storeId: string, userId: string): Promise<boo
 
         return !!isAuthorised;
     } catch (error) {
-        console.log(error,"Unauthorised user")
+        console.log(error, "Unauthorised user")
         throw error;
     }
 }
 // This function validate the requessts made on the API. It combines one or more functions present in the permissions folder 
 export async function validateRequestAndAuthorize(
-    storeId: string, 
-    userId: string, 
-    param: string,
-  ): Promise<{ error?: string, status?: number }> {
+    storeId: string,
+    userId: string,
+    param: string
+): Promise<{ error?: string, status?: number }> {
     // User Authentication
     if (!userId) {
-      return { error: "Unauthenticated", status: 403 };
+        return { error: "Unauthenticated", status: 403 };
     }
-  
+
     // User Authorization
     const havePermission = await isAuthorised(storeId, userId);
     if (!havePermission) {
-      return { error: "Unauthorized", status: 401 };
+        return { error: "Unauthorized", status: 401 };
     }
-  
+
     // Parameter Validation
-    //::: we need to add moe validation here 
-      if (!param) {
+    //::: we need to add more validation here bc even if the required param is present. It can be one that has been modified 
+    if (!param) {
         return { error: `${param} is required`, status: 400 };
-      }
-    
-  
+    }
+
+
     // If all checks pass
     return {};
-  }
-  
+}
+

@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
-import { isAuthorised } from "@/permissions/checkStorePermission";
+import { validateRequestAndAuthorize } from "@/permissions/checkStorePermission";
+import validator from 'validator';
 
 export async function GET(
   req: Request,
@@ -31,26 +32,29 @@ export async function DELETE(
   { params }: { params: { sizeId: string, storeId: string } }
 ) {
   try {
+    // Authentication check
     const { userId } = auth();
 
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 403 });
+    const validateRequest = await validateRequestAndAuthorize(params.storeId, userId!, params.sizeId)
+
+    if (validateRequest.error) {
+      return NextResponse.json({ error: validateRequest.error }, { status: validateRequest.status });
     }
 
-    const havePermission = await isAuthorised(params.storeId, userId)
+    // Sanitization
+    const sanitizedSizeId = validator.trim(validator.escape(params.sizeId));
 
-    if (!havePermission) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    // Validation
+    if (typeof sanitizedSizeId !== "string" || !validator.isUUID(sanitizedSizeId)) {
+      return new NextResponse("Invalid size id format", { status: 400 });
     }
 
+    // Check if sizeId exists in the database (optional, depending on your use case)
 
-    if (!params.sizeId) {
-      return new NextResponse("Size id is required", { status: 400 });
-    }
-
+    // Perform deletion
     const size = await prismadb.size.delete({
       where: {
-        id: params.sizeId
+        id: sanitizedSizeId
       }
     });
 
@@ -61,7 +65,6 @@ export async function DELETE(
   }
 };
 
-
 export async function PATCH(
   req: Request,
   { params }: { params: { sizeId: string, storeId: string } }
@@ -69,35 +72,37 @@ export async function PATCH(
   try {
     // Authentication check
     const { userId } = auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthenticated" }, { status: 403 });
+
+    const validateRequest = await validateRequestAndAuthorize(params.storeId, userId!, params.sizeId)
+
+    if (validateRequest.error) {
+      return NextResponse.json({ error: validateRequest.error }, { status: validateRequest.status });
     }
 
-    // Early authorization check
-    const havePermission = await isAuthorised(params.storeId, userId);
-    if (!havePermission) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // Validate and sanitize input ! for more server security in the future !!! front end validation is already done with a library called zodresolver 
-    if (!params.sizeId) {
-      return NextResponse.json({ error: "Size id is required" }, { status: 400 });
+    // Sanitize and Validate sizeId
+    const sanitizedSizeId = validator.trim(validator.escape(params.sizeId));
+    if (!validator.isUUID(sanitizedSizeId)) {
+      return NextResponse.json({ error: "Invalid size id format" }, { status: 400 });
     }
 
     const body = await req.json();
-    const { name, value } = body;
+    let { name, value } = body;
 
-    if (!name) {
-      return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    // Validate and Sanitize name
+    if (typeof name !== "string") {
+      return NextResponse.json({ error: "Name is required and must be a string" }, { status: 400 });
     }
+    name = validator.trim(validator.escape(name));
 
-    if (!value) {
-      return NextResponse.json({ error: "Value is required" }, { status: 400 });
+    // Validate and Sanitize value
+    if (typeof value !== "string") {
+      return NextResponse.json({ error: "Value is required and must be a string" }, { status: 400 });
     }
+    value = validator.trim(validator.escape(value));
 
     // Proceed with the update operation
     const size = await prismadb.size.update({
-      where: { id: params.sizeId },
+      where: { id: sanitizedSizeId },
       data: { name, value }
     });
 
@@ -107,4 +112,3 @@ export async function PATCH(
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 };
-
