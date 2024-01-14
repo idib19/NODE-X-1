@@ -4,11 +4,18 @@ import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 
-import { columns, OrderColumn } from "./columns";
+import { columns, OrderColumn, columns2, OrderColumn2 } from "./columns";
+
+
+
+
 
 interface OrderClientProps {
-  data: OrderColumn[];
+  data: OrderColumn2[];
 }
+
+
+
 
 export const OrderClient: React.FC<OrderClientProps> = ({
   data
@@ -18,7 +25,7 @@ export const OrderClient: React.FC<OrderClientProps> = ({
       <Heading title={`Commandes (${data.length})`} description="Gérer vos commandes" />
       <Separator />
       {/*The DataTable components needs to be understood deeper*/}
-      <DataTable searchKey="products" columns={columns} data={data} />
+      <DataTable searchKey="name" columns={columns2} data={data} />
     </>
   );
 };
