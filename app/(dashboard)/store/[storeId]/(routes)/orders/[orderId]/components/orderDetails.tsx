@@ -2,6 +2,18 @@
  * v0 by Vercel.
  * @see https://v0.dev/t/IpJDCuMDEbX
  */
+
+
+
+
+
+
+
+
+
+
+
+
 export default function OrderDetails () {
     return (
         <div className="flex flex-col gap-6 p-4 md:p-6">
@@ -65,6 +77,10 @@ export default function OrderDetails () {
                         <p>Awesome Product</p>
                     </div>
                     <div>
+                        <h3 className="text-base font-semibold">Taille</h3>
+                        <p>M</p>
+                    </div>
+                    <div>
                         <h3 className="text-base font-semibold">Quantity</h3>
                         <p>1</p>
                     </div>
@@ -81,4 +97,8 @@ export default function OrderDetails () {
         </div>
     )
 }
+
+
+
+
 

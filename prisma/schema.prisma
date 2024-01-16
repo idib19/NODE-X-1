@@ -102,7 +102,7 @@ model Order {
   @@index([storeId])
 }
 
-// Intermediary for a many-to-many relationship
+// Intermediary for a many-to-many relationship-- size should be added here the ordered item's color too
 model OrderItem {
   id        String  @id @default(uuid())
   orderId   String // Foreign Key to Order

@@ -1,5 +1,6 @@
 import prismadb from "@/lib/prismadb";
 import OrderDetails from "./components/orderDetails";
+import { OrderDetails2 } from "./components/orderDetails2";
 
 const OrderDetailsPage = async ({
     params
@@ -7,7 +8,7 @@ const OrderDetailsPage = async ({
     params: { orderId: string }
   }) => {
   
-    // get specific order 
+    // get specific order data
     const order = await prismadb.order.findUnique({
       where: {
         id: params.orderId
@@ -20,28 +21,12 @@ const OrderDetailsPage = async ({
         }
       }
     });
-  
-   
-  
-    // const formattedOrders: OrderColumn[] = orders.map((item) => ({
-    //   id: item.id,
-    //   tel: item.phone,
-    //   name: item.name,
-    //   // address: item.address,
-    //   // products: item.orderItems.map((orderItem) => orderItem.product.name).join(', '),
-    //   price: formatter.format(item.orderItems.reduce((total, item) => {
-    //     return total + Number(item.product.price)
-    //   }, 0)),
-    //   status: item.isPaid,
-    //   date: format(item.createdAt, 'MMMM do, yyyy'),
-    // }));
-    
-    
+
   
     return (
       <div className="flex-col">
         <div className="flex-1 space-y-4 p-8 pt-6">
-           <OrderDetails/>
+           <OrderDetails2 order={order}  />
         </div>
       </div>
     );
