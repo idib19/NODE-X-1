@@ -16,11 +16,16 @@ const OrderDetailsPage = async ({
       include: {
         orderItems: {
           include: {
-            product: true
+            product: {
+              include : {
+                images : true 
+              }
+            }
           }
         }
       }
     });
+
 
   
     return (

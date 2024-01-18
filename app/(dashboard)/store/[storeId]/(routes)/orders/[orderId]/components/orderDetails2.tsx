@@ -7,15 +7,46 @@ import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 
-import { Order, OrderItem } from "@prisma/client"
+import { Order, OrderItem, Product } from "@prisma/client"
+import { Decimal } from "@prisma/client/runtime/library"
 
 interface OrderDetailsProps {
-    order : Order & {
-        orderItems: OrderItem[];
-      } | null;
-};
+    order: {
+      id: string;
+      storeId: string;
+      isPaid: boolean;
+      name: string;
+      phone: string;
+      address: string;
+      createdAt: Date;
+      updatedAt: Date;
+      orderItems: {
+        id: string;
+        product: {
+          id: string;
+          storeId: string;
+          categoryId: string;
+          name: string;
+          price: Decimal;
+          isFeatured: boolean;
+          isArchived: boolean;
+          sizeId: string;
+          colorId: string;
+          createdAt: Date;
+          updatedAt: Date;
+          images: {
+            id: string;
+            url: string;
+          }[];
+        };
+      }[];
+    } | null;
+  }
+  
 
-export const OrderDetails2 : React.FC<OrderDetailsProps> = ({ order }) => {
+
+
+export const OrderDetails2: React.FC<OrderDetailsProps> = ({ order }) => {
     return (
         <main className="flex flex-col gap-8 p-4 md:p-6">
             <div className="flex items-center gap-4">
@@ -42,36 +73,23 @@ export const OrderDetails2 : React.FC<OrderDetailsProps> = ({ order }) => {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    <TableRow>
+                                    {order?.orderItems?.map((orderItem) => (
+                                    <TableRow key={orderItem.id}>
                                         <TableCell className="hidden md:table-cell">
                                             <img
                                                 alt="Product image"
                                                 className="aspect-square rounded-md object-cover"
                                                 height="64"
-                                                src="/placeholder.svg"
+                                                src={orderItem.product.images.at(0)?.url}
                                                 width="64"
-                                            />
+                                            />                                        
                                         </TableCell>
-                                        <TableCell className="font-medium">Glimmer Lamps</TableCell>
+                                        <TableCell className="font-medium">{orderItem.product.name}</TableCell>
                                         <TableCell>2</TableCell>
-                                        <TableCell>$60.00</TableCell>
+                                        <TableCell>${orderItem.product.price.toString()}</TableCell>
                                         <TableCell>$120.00</TableCell>
                                     </TableRow>
-                                    <TableRow>
-                                        <TableCell className="hidden md:table-cell">
-                                            <img
-                                                alt="Product image"
-                                                className="aspect-square rounded-md object-cover"
-                                                height="64"
-                                                src="/placeholder.svg"
-                                                width="64"
-                                            />
-                                        </TableCell>
-                                        <TableCell className="font-medium">Aqua Filters</TableCell>
-                                        <TableCell>3</TableCell>
-                                        <TableCell>$49.00</TableCell>
-                                        <TableCell>$147.00</TableCell>
-                                    </TableRow>
+                                        ))}
                                 </TableBody>
                             </Table>
                         </CardContent>
