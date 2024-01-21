@@ -28,6 +28,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import ImageUpload from "@/components/ui/ImageUpload"
 import { Checkbox } from "@/components/ui/checkbox"
 
+// validation object using zod
 const formSchema = z.object({
   name: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
@@ -39,8 +40,12 @@ const formSchema = z.object({
   isArchived: z.boolean().default(false).optional()
 });
 
+// blueprint for the structure of the form and its fields
 type ProductFormValues = z.infer<typeof formSchema>
 
+
+
+// interface for the react component itself
 interface ProductFormProps {
   initialData: Product & {
     images: Image[]
@@ -49,6 +54,8 @@ interface ProductFormProps {
   colors: Color[];
   sizes: Size[];
 };
+
+
 
 export const ProductForm: React.FC<ProductFormProps> = ({
   initialData,
@@ -67,6 +74,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const toastMessage = initialData ? 'Produit modifié.' : 'Produit créer.';
   const action = initialData ? 'Enregistrer' : 'Créez';
 
+  // initialisation of the default values to be passed ot not to the form
   const defaultValues = initialData ? {
     ...initialData,
     price: parseFloat(String(initialData?.price)),
@@ -81,6 +89,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     isArchived: false,
   }
 
+  // creation of the form using useForm and validation config with zodResolver 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues
