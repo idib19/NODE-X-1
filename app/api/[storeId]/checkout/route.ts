@@ -84,7 +84,5 @@ export async function POST(req: Request, { params }: { params: { storeId: string
         },
     });
 
-    return NextResponse.json({ url: session.url }, {
-        headers: corsHeaders
-    });
+    return NextResponse.json({ url: session.url }, { headers: corsHeaders });
 };

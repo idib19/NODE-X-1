@@ -39,8 +39,10 @@ export async function POST(req: Request, { params }: { params: { storeId: string
                 },
             },
         });
+        console.log('order created ' + order.id)
 
-        return new NextResponse("Order created " + order.id, { status: 200 });
+        return  NextResponse.json({message : "success order created"}, {headers: corsHeaders})
+
     } catch (error) {
         console.error("Error processing order:", error);
         return new NextResponse("Internal Server Error", { status: 500 });
