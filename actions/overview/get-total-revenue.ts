@@ -1,7 +1,9 @@
-import prismadb from "@/lib/prismadb";
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 export const getTotalRevenue = async (storeId: string) => {
-    const paidOrders = await prismadb.order.findMany({
+    const paidOrders = await prisma.order.findMany({
         where: {
             storeId,
             isPaid: true

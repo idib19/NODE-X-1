@@ -1,7 +1,9 @@
-import prismadb from "@/lib/prismadb";
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 export const getStockCount = async (storeId: string) => {
-    const stockCount = await prismadb.product.count({
+    const stockCount = await prisma.product.count({
         where: {
             storeId,
             isArchived: false,

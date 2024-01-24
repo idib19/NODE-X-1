@@ -95,7 +95,7 @@ model Order {
   isPaid     Boolean     @default(false)
   name       String      @default("")
   phone      String      @default("")
-  // email      String      @default("")
+  email      String      @default("") @unique
   address    String      @default("")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
