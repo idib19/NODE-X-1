@@ -57,9 +57,13 @@ export async function PATCH(
         const getStoreByUserId = await prismadb.store.findFirst({
             where: {
                 id: params.storeId,
-                userId
+                users: {
+                    some: {
+                        id: userId
+                    }
+                }
             }
-        })
+        });
 
         if (!getStoreByUserId) {
             return new NextResponse("Unauthorized", { status: 403 });
@@ -101,9 +105,13 @@ export async function DELETE(
         const getStoreByUserId = await prismadb.store.findFirst({
             where: {
                 id: params.storeId,
-                userId
+                users: {
+                    some: {
+                        id: userId
+                    }
+                }
             }
-        })
+        });
 
         if (!getStoreByUserId) {
             return new NextResponse("Unauthorized", { status: 403 });
