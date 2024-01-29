@@ -19,12 +19,7 @@ export async function POST(req: Request) {
     }
 
     // Create a new user we need to review this function and the entire flow of creating a user and a store
-    // const newUser = await prismadb.user.create({
-    //   data: {
-    //     id: userId,
-    //     storeId : 
-    //   },
-    // });
+   
 
     const store = await prismadb.store.create({
       data: {
