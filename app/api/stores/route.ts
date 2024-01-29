@@ -18,13 +18,13 @@ export async function POST(req: Request) {
       return new NextResponse("Name is required", { status: 400 });
     }
 
-    // Create a new user
-    const newUser = await prismadb.user.create({
-      data: {
-        id: userId,
-        storeId : 
-      },
-    });
+    // Create a new user we need to review this function and the entire flow of creating a user and a store
+    // const newUser = await prismadb.user.create({
+    //   data: {
+    //     id: userId,
+    //     storeId : 
+    //   },
+    // });
 
     const store = await prismadb.store.create({
       data: {
