@@ -7,7 +7,6 @@ import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 
-import { Order, OrderItem, Product } from "@prisma/client"
 import { Decimal } from "@prisma/client/runtime/library"
 
 interface OrderDetailsProps {
