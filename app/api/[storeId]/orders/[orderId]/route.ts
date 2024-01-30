@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
+import { isAuthorised } from "@/permissions/checkStorePermission";
 
 export async function GET(
     req: Request,
@@ -31,7 +32,7 @@ export async function DELETE(
 ) {
     try {
         const { userId } = auth();
-
+        const storeId = params.storeId
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 403 });
         }
@@ -43,19 +44,10 @@ export async function DELETE(
         // we should set up a validation function here scalable and efficient. using
         // using either tokens. cessions or basic permissions checking
 
-        const isAuthorised = await prismadb.store.findFirst({
-            where: {
-                id: params.storeId,
-                users: {
-                    some: {
-                        id: userId
-                    }
-                }
-            }
-        });
+        const Authorised = await isAuthorised(storeId, userId)
 
-        if (!isAuthorised) {
-            return new NextResponse("Unauthorized", { status: 405 });
+        if (!Authorised) {
+            return new NextResponse("Unauthorized", { status: 401 });
         }
 
         // should be separated in a separate module for OCP 

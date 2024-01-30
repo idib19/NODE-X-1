@@ -36,7 +36,7 @@ export default async function DashboardLayout({ children, params }: { children: 
     // Render children components if the user has permission
     return (
         <>
-            <Navbar />
+            <Navbar/>
             {children}
         </>
     );

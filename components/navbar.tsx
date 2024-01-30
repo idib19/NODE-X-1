@@ -25,7 +25,7 @@ const Navbar = async () => {
     // than always calling the database to tchek actions and shit 
     const store = await prismadb.store.findFirst({
         where: {
-            id: user.storeId,
+            id: user?.storeId,
             users: {
                 some: {
                     id: userId

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
+import { isAuthorised } from "@/permissions/checkStorePermission";
 
 export async function GET(
   req: Request,
@@ -31,6 +32,7 @@ export async function DELETE(
 ) {
   try {
     const { userId } = auth();
+    const storeId = params.storeId
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -40,15 +42,10 @@ export async function DELETE(
       return new NextResponse("Color id is required", { status: 400 });
     }
 
-    const storeByUserId = await prismadb.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId
-      }
-    });
+    const storeByUserId = await isAuthorised(storeId, userId)
 
     if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 405 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const color = await prismadb.color.delete({
@@ -71,6 +68,7 @@ export async function PATCH(
 ) {
   try {
     const { userId } = auth();
+    const storeId = params.storeId;
 
     const body = await req.json();
 
@@ -93,15 +91,10 @@ export async function PATCH(
       return new NextResponse("Color id is required", { status: 400 });
     }
 
-    const storeByUserId = await prismadb.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId
-      }
-    });
+    const storeByUserId = await isAuthorised(storeId, userId)
 
     if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 405 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const color = await prismadb.color.update({
