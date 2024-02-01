@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 
 const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": "https://massa-ecom.vercel.app/",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
@@ -40,7 +40,6 @@ export async function POST(req: Request, { params }: { params: { storeId: string
                 },
             },
         });
-        console.log('order created ' + order.id)
 
         return NextResponse.json({ message: "success order created" }, { headers: corsHeaders })
 
