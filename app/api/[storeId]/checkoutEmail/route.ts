@@ -41,7 +41,7 @@ export async function POST(req: Request, { params }: { params: { storeId: string
         });
         console.log('order created ' + order.id)
 
-        return  NextResponse.json({message : "success order created"}, {headers: corsHeaders})
+        return NextResponse.json({ message: "success order created" }, { headers: corsHeaders })
 
     } catch (error) {
         console.error("Error processing order:", error);
