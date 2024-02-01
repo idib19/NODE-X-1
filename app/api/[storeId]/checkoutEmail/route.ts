@@ -28,6 +28,7 @@ export async function POST(req: Request, { params }: { params: { storeId: string
                 name: data.name,
                 phone: data.phone,
                 address: data.address,
+                email: data.email,
                 orderItems: {
                     create: productIds.map((productId: string) => ({
                         product: {
