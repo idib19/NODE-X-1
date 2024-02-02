@@ -2,9 +2,6 @@ import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 
 
-export async function OPTIONS() {
-    return NextResponse.json({});
-}
 
 export async function POST(req: Request, { params }: { params: { storeId: string } }) {
     try {
