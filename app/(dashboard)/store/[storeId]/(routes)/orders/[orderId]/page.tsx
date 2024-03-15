@@ -1,6 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import OrderDetails from "./components/orderDetails";
-import { OrderDetails2 } from "./components/orderDetails2";
+import { OrderDetails } from "./components/orderDetails";
 
 const OrderDetailsPage = async ({
     params
@@ -31,7 +30,7 @@ const OrderDetailsPage = async ({
     return (
       <div className="flex-col">
         <div className="flex-1 space-y-4 p-8 pt-6">
-           <OrderDetails2 order={order}  />
+           <OrderDetails order={order}  />
         </div>
       </div>
     );

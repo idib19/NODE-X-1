@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -86,6 +85,13 @@ model Product {
   @@index([sizeId])
   @@index([colorId])
 }
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DEVLIVERED
+  CANCELLED
+}
 
 model Order {
   id         String      @id @default(uuid())
@@ -100,6 +106,7 @@ model Order {
   address    String      @default("")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+  status     OrderStatus @default(PENDING)
 
   @@index([storeId])
 }
