@@ -9,7 +9,7 @@ export type OrderColumn = {
   name: string;
   date: string;
   price: string;
-  status: boolean;
+  status: string;
 }
 
 

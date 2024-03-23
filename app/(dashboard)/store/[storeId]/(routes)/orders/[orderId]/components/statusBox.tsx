@@ -17,6 +17,10 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
+import { OrderStatusContext } from "@/providers/utils/orderStatusProvider"
+import { useContext } from "react"
+
+
 type Status = {
     value: string
     label: string
@@ -24,39 +28,39 @@ type Status = {
 
 const statuses: Status[] = [
     {
-        value: "pending",
+        value: "PENDING",
         label: "PENDING",
     },
     {
-        value: "processing",
+        value: "PROCESSING",
         label: "PROCESSING",
     },
     {
-        value: "shipped",
+        value: "SHIPPED",
         label: "SHIPPED",
     },
     {
-        value: "delivered",
+        value: "DELIVERED",
         label: "DELIVERED",
     },
     {
-        value: "canceled",
+        value: "CANCELED",
         label: "CANCELLED",
     },
 ]
 
 export function ComboboxPopover() {
     const [open, setOpen] = React.useState(false)
-    const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
-        null
-    )
+    const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(null)
+
+    const {orderStatus, handleStatusChange} = useContext(OrderStatusContext)
 
     return (
         <div className="flex items-center space-x-4 p-2">
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button variant="outline" className="w-[150px] justify-start">
-                        {selectedStatus ? <>{selectedStatus.label}</> : <> PENDING</>}
+                        {orderStatus ? <>{orderStatus}</> : <> PENDING</>}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="p-0" side="right" align="start">
@@ -70,10 +74,7 @@ export function ComboboxPopover() {
                                         key={status.value}
                                         value={status.value}
                                         onSelect={(value) => {
-                                            setSelectedStatus(
-                                                statuses.find((priority) => priority.value === value) ||
-                                                null
-                                            )
+                                            handleStatusChange(status.label)
                                             setOpen(false)
                                         }}
                                     >

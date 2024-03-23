@@ -28,22 +28,25 @@ export default function RootLayout({
 
     <ClerkProvider>
 
-      <html lang="en">
+      
+        <html lang="en">
 
-        <body className={inter.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-          >
-            <ToasterProvider />
-            <ModalProvider />
-            {children}
+          <body className={inter.className}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+            >
+              <ToasterProvider />
+              <ModalProvider />
+              {children}
 
             </ThemeProvider>
-        </body>
+          </body>
 
-      </html>
+        </html>
+     
+
 
     </ClerkProvider>
 

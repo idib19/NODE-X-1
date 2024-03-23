@@ -49,6 +49,7 @@ export default async function SetupLayout({
 
     
         // Check if a store in the database is linked to this user
+        // !!!!!!! BAD ARCHITECTUEE !!!!!!! THE FRONT END KNOWS ABOUT THE DATABASE HERE !!!!!! TO BE CHANGED 
         const store = await prismadb.store.findFirst({
             where: {
                 id: user.storeId,
