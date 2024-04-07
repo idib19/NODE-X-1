@@ -10,6 +10,8 @@ const SizesPage = async ({
 }: {
   params: { storeId: string }
 }) => {
+  // violation of the de dependency inversion principle DIP 
+  // source code dependencies should not refer to concrete modules 
   const sizes = await prismadb.size.findMany({
     where: {
       storeId: params.storeId
@@ -19,6 +21,7 @@ const SizesPage = async ({
     }
   });
 
+  // 
   const formattedSizes: SizeColumn[] = sizes.map((item) => ({
     id: item.id,
     name: item.name,
