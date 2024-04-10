@@ -85,6 +85,7 @@ model Product {
   @@index([sizeId])
   @@index([colorId])
 }
+
 enum OrderStatus {
   PENDING
   PROCESSING
@@ -94,19 +95,19 @@ enum OrderStatus {
 }
 
 model Order {
-  id         String      @id @default(uuid())
-  storeId    String // Foreign Key to Store
-  store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems OrderItem[] // Relation to OrderItem model
-  isPaid     Boolean     @default(false)
-  clientId   String      @default("")
-  name       String      @default("")
-  phone      String      @default("")
-  email      String      @default("") @unique
-  address    String      @default("")
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  status     OrderStatus @default(PENDING)
+  id          String      @id @default(uuid())
+  storeId     String // Foreign Key to Store
+  store       Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems  OrderItem[] // Relation to OrderItem model
+  isPaid      Boolean     @default(false)
+  clientId    String      @default("")
+  name        String      @default("")
+  phone       String      @default("")
+  email       String      @unique @default("")
+  address     String      @default("")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  status      OrderStatus @default(PENDING)
 
   @@index([storeId])
 }
