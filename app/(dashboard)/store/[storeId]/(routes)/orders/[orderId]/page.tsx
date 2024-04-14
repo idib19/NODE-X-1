@@ -12,6 +12,7 @@ const OrderDetailsPage = async ({
   // get specific order data
   // BAD ARCHITECTURE HERE !! UI SHOULD NOT KNOW ABOUT DB !
   // NEEDS TO  BE A FETCH TO API/ORDERS/ORDERID/GET-ORDER-DETAILS
+  // Needs to be an actions function that fetches the data 
   const order = await prismadb.order.findUnique({
     where: {
       id: params.orderId

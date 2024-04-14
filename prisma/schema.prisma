@@ -95,19 +95,19 @@ enum OrderStatus {
 }
 
 model Order {
-  id          String      @id @default(uuid())
-  storeId     String // Foreign Key to Store
-  store       Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems  OrderItem[] // Relation to OrderItem model
-  isPaid      Boolean     @default(false)
-  clientId    String      @default("")
-  name        String      @default("")
-  phone       String      @default("")
-  email       String      @unique @default("")
-  address     String      @default("")
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  status      OrderStatus @default(PENDING)
+  id         String      @id @default(uuid())
+  storeId    String // Foreign Key to Store
+  store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems OrderItem[] // Relation to OrderItem model
+  isPaid     Boolean     @default(false)
+  clientId   String      @default("")
+  name       String      @default("")
+  phone      String      @default("")
+  email      String      @unique @default("")
+  address    String      @default("")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  status     OrderStatus @default(PENDING)
 
   @@index([storeId])
 }
@@ -119,6 +119,7 @@ model OrderItem {
   order     Order   @relation(fields: [orderId], references: [id])
   productId String // Foreign Key to Product
   product   Product @relation(fields: [productId], references: [id])
+  quantity  Decimal @default(1)
 
   @@index([orderId])
   @@index([productId])

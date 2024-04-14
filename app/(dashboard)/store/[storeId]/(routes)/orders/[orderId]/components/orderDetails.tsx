@@ -18,9 +18,11 @@ interface OrderDetailsProps {
         isPaid: boolean;
         name: string;
         phone: string;
+        email: string;
         address: string;
         createdAt: Date;
         updatedAt: Date;
+        clientId: string;
         orderItems: {
             id: string;
             product: {
@@ -40,6 +42,7 @@ interface OrderDetailsProps {
                     url: string;
                 }[];
             };
+            quantity: Decimal;
         }[];
     } | null;
 }
@@ -48,12 +51,19 @@ interface OrderDetailsProps {
 
 
 export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
+
+    // Calculate total cost using reduce()
+    const totalCost = order?.orderItems?.reduce((acc, item) => {
+        return acc.add(item.product.price.mul(item.quantity)); // Use Decimal methods
+    }, new Decimal(0)) || new Decimal(0); // Handle absence of orderItems
+
+
     return (
         <main className="flex flex-col gap-8 p-4 md:p-6">
             <div className="flex items-center gap-4">
                 <h1 className="font-semibold text-lg md:text-xl">
-                    Order #3102 -<span className="font-normal text-gray-500 dark:text-gray-400"> {order?.name} </span>
-                    <span className="font-normal text-gray-500 dark:text-gray-400">on June 23, 2024</span>
+                    Order #{order?.id} -<span className="font-normal text-gray-500 dark:text-gray-400"> {order?.name} </span>
+                    <span className="font-normal text-gray-500 dark:text-gray-400">On {order?.createdAt.toDateString()}</span>
                 </h1>
             </div>
             <div className="flex flex-col md:grid md:grid-cols-6 gap-6">
@@ -86,9 +96,9 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                                                 />
                                             </TableCell>
                                             <TableCell className="font-medium">{orderItem.product.name}</TableCell>
-                                            <TableCell>2</TableCell>
+                                            <TableCell>{orderItem.quantity.toString()}</TableCell>
                                             <TableCell>${orderItem.product.price.toString()}</TableCell>
-                                            <TableCell>$120.00</TableCell>
+                                            <TableCell>${totalCost.toString()}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -102,16 +112,16 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                         <CardContent className="grid gap-4">
                             <div className="flex items-center">
                                 <div>Subtotal</div>
-                                <div className="ml-auto">$267.00</div>
+                                <div className="ml-auto">${totalCost.toString()}</div>
                             </div>
                             <div className="flex items-center">
                                 <div>Discount</div>
-                                <div className="ml-auto">-$20.00</div>
+                                <div className="ml-auto">-$0.00</div>
                             </div>
                             <Separator />
                             <div className="flex items-center font-medium">
                                 <div>Total</div>
-                                <div className="ml-auto">$247.00</div>
+                                <div className="ml-auto">${totalCost.toString()}</div>
                             </div>
                         </CardContent>
                     </Card>
@@ -137,7 +147,7 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                             <CardContent className="text-sm">
                                 <div className="grid gap-1">
                                     <span className="">{order?.phone}</span>
-                                    <div>client@gmail.com</div>
+                                    <div>{order?.email}</div>
                                 </div>
                             </CardContent>
                         </div>
@@ -152,15 +162,7 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                                 </div>
                             </CardContent>
                         </div>
-                        <Separator />
-                        <div>
-                            <CardHeader>
-                                <CardTitle>Methode de payement</CardTitle>
-                            </CardHeader>
-                            <CardContent className="text-sm">
-                                <div>Credit Card ending in 1234</div>
-                            </CardContent>
-                        </div>
+                       
                     </Card>
 
                     <Card className="flex self-start  ">
