@@ -4,6 +4,8 @@ import prismadb from '@/lib/prismadb';
 import { validateRequestAndAuthorize } from '@/permissions/checkStorePermission';
 import validator from 'validator';
 
+// USING A POST REQUEST TO RETRIEVE DATA IS POSSIBLE BUT IS PROBABLY
+// NOT THE BEST WAY TO GO ABOUT THIS HERE !! TO UPDATE !!
 export async function POST(
     req: Request,
     { params }: { params: { storeId: string } },

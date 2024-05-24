@@ -13,13 +13,28 @@ export async function GET(
             return new NextResponse("Order id is required", { status: 400 });
         }
 
-        const order = await prismadb.product.findUnique({
+        const order = await prismadb.order.findUnique({
             where: {
-                id: params.orderId
+              id: params.orderId
+            },
+            include: {
+              orderItems: {
+                include: {
+                  product: {
+                    include: {
+                      images: true
+                    }
+                  }
+                }
+              }
             }
-        });
+          });
+        
+          
 
-        return NextResponse.json(order);
+        return NextResponse.json(order) ;
+
+        
     } catch (error) {
         console.log('[ORDER_GET]', error);
         return new NextResponse("Internal error", { status: 500 });
