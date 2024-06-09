@@ -133,7 +133,7 @@ model OrderItem {
   product   Product @relation(fields: [productId], references: [id])
   size      String  @default("")
   color     String  @default("")
-  quantity  Int     @default(1)
+  quantity  Decimal     @default(1)
 
   @@index([orderId])
   @@index([productId])
