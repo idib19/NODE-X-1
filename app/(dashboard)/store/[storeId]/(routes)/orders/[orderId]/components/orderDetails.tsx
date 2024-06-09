@@ -78,6 +78,7 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                                     <TableRow>
                                         <TableHead className="w-[80px] hidden md:table-cell">Image</TableHead>
                                         <TableHead className="max-w-[150px]">Name</TableHead>
+                                        <TableHead>Options</TableHead>
                                         <TableHead>Quantity</TableHead>
                                         <TableHead>Price</TableHead>
                                         <TableHead>Total</TableHead>
@@ -96,6 +97,12 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                                                 />
                                             </TableCell>
                                             <TableCell className="font-medium">{orderItem.product.name}</TableCell>
+                                            <TableCell className="flex gap-x-2"> M
+                                                <div
+                                                    className={`h-6 w-6 rounded-full border`}
+                                                    style={{ backgroundColor: "FFFFFF" }}
+                                                />
+                                            </TableCell>
                                             <TableCell>{orderItem.quantity.toString()}</TableCell>
                                             <TableCell>${orderItem.product.price.toString()}</TableCell>
                                             <TableCell>${totalCost.toString()}</TableCell>
@@ -162,7 +169,7 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                                 </div>
                             </CardContent>
                         </div>
-                       
+
                     </Card>
 
                     <Card className="flex self-start  ">

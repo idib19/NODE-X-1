@@ -1,23 +1,20 @@
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 
-
-
 export async function OPTIONS() {
-    return NextResponse.json("ok", {status : 200});
+    return NextResponse.json("ok", { status: 200 });
 }
 
 export async function POST(req: Request, { params }: { params: { storeId: string } }) {
     try {
-        const { productIds, data } = await req.json();
+        const { orderItemsData, data } = await req.json();
 
         // Validate required fields
-        if (!productIds || productIds.length === 0) {
-            return new NextResponse("Product ids are required", { status: 400 });
+        if (!orderItemsData || orderItemsData.length === 0) {
+            return new NextResponse("Order items are required", { status: 400 });
         }
 
         // Create order in the database
-         
         const order = await prismadb.order.create({
             data: {
                 storeId: params.storeId,
@@ -28,18 +25,20 @@ export async function POST(req: Request, { params }: { params: { storeId: string
                 email: data.email,
                 clientId: data.clientId,
                 orderItems: {
-                    create: productIds.map((productId: string) => ({
+                    create: orderItemsData.map((item: { productId: string, options: { size: string, color: string } }) => ({
                         product: {
                             connect: {
-                                id: productId,
+                                id: item.productId,
                             },
                         },
+                        size: item.options.size,
+                        color: item.options.color
                     })),
                 },
             },
         });
 
-        return NextResponse.json({ message: "success order created" })
+        return NextResponse.json({ message: "Order created successfully" }, { status: 201 });
 
     } catch (error) {
         console.error("Error processing order:", error);

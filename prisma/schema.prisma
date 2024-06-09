@@ -68,7 +68,7 @@ model Product {
   categoryId  String // Foreign Key to Category
   category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name        String
-  description String
+  description String      @default("")
   price       Decimal
   isFeatured  Boolean     @default(false)
   isArchived  Boolean     @default(false)
@@ -91,7 +91,6 @@ model Image {
   id        String   @id @default(uuid())
   productId String // Foreign Key to Product
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  color     String
   url       String // URL of the image
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -132,6 +131,8 @@ model OrderItem {
   order     Order   @relation(fields: [orderId], references: [id])
   productId String // Foreign Key to Product
   product   Product @relation(fields: [productId], references: [id])
+  size      String  @default("")
+  color     String  @default("")
   quantity  Int     @default(1)
 
   @@index([orderId])
