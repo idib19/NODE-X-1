@@ -2,8 +2,8 @@ import { format } from "date-fns";
 
 import prismadb from "@/lib/prismadb";
 
-import { SizeColumn } from "./components/columns"
-import { SizesClient } from "./components/client";
+import { AttributeColumn } from "./components/columns"
+import { AttributesClient } from "./components/client";
 
 const SizesPage = async ({
   params
@@ -12,9 +12,9 @@ const SizesPage = async ({
 }) => {
   // violation of the de dependency inversion principle DIP 
   // source code dependencies should not refer to concrete modules 
-  const sizes = await prismadb.size.findMany({
+  const attributes = await prismadb.attribute.findMany({
     where: {
-      storeId: params.storeId
+      storeId: params.storeId,
     },
     orderBy: {
       createdAt: 'desc'
@@ -22,17 +22,17 @@ const SizesPage = async ({
   });
 
   // 
-  const formattedSizes: SizeColumn[] = sizes.map((item) => ({
+  const formattedAttributes: AttributeColumn[] = attributes.map((item) => ({
     id: item.id,
     name: item.name,
-    value: item.value,
+    // value: item.value,
     createdAt: format(item.createdAt, 'MMMM do, yyyy'),
   }));
 
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <SizesClient data={formattedSizes} />
+        <AttributesClient data={formattedAttributes} />
       </div>
     </div>
   );

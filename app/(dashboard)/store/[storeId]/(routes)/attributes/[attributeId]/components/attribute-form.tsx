@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { Trash } from "lucide-react"
-import { Size } from "@prisma/client"
+import { Attribute} from "@prisma/client"
 import { useParams, useRouter } from "next/navigation"
 
 import { Input } from "@/components/ui/input"
@@ -29,13 +29,13 @@ const formSchema = z.object({
   value: z.string().min(1),
 });
 
-type SizeFormValues = z.infer<typeof formSchema>
+type AttributeFormValues = z.infer<typeof formSchema>
 
-interface SizeFormProps {
-  initialData: Size | null;
+interface AttributeFormProps {
+  initialData: Attribute | null;
 };
 
-export const SizeForm: React.FC<SizeFormProps> = ({
+export const AttributeForm: React.FC<AttributeFormProps> = ({
   initialData
 }) => {
   const params = useParams();
@@ -44,28 +44,28 @@ export const SizeForm: React.FC<SizeFormProps> = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? 'Edit size' : 'Create size';
-  const description = initialData ? 'Edit a size.' : 'Add a new size';
-  const toastMessage = initialData ? 'Size updated.' : 'Size created.';
+  const title = initialData ? 'Edit attribute' : 'Create attribute';
+  const description = initialData ? 'Edit a attribute.' : 'Add a new attribute';
+  const toastMessage = initialData ? 'attribute updated.' : 'attribute created.';
   const action = initialData ? 'Save changes' : 'Create';
 
-  const form = useForm<SizeFormValues>({
+  const form = useForm<AttributeFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: ''
     }
   });
 
-  const onSubmit = async (data: SizeFormValues) => {
+  const onSubmit = async (data: AttributeFormValues) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/${params.storeId}/sizes/${params.sizeId}`, data);
+        await axios.patch(`/api/${params.storeId}/attributes/${params.attributeId}`, data);
       } else {
-        await axios.post(`/api/${params.storeId}/sizes`, data);
+        await axios.post(`/api/${params.storeId}/attributes`, data);
       }
       router.refresh();
-      router.push(`/store/${params.storeId}/sizes`);
+      router.push(`/store/${params.storeId}/attributes`);
       toast.success(toastMessage);
     } catch (error: any) {
       toast.error('Something went wrong.');
@@ -77,12 +77,12 @@ export const SizeForm: React.FC<SizeFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/sizes/${params.sizeId}`);
+      await axios.delete(`/api/${params.storeId}/attributes/${params.attributeId}`);
       router.refresh();
-      router.push(`/store/${params.storeId}/sizes`);
-      toast.success('Size deleted.');
+      router.push(`/store/${params.storeId}/attributes`);
+      toast.success('attribute deleted.');
     } catch (error: any) {
-      toast.error('Make sure you removed all products using this size first.');
+      toast.error('Make sure you removed all products using this attribute first.');
     } finally {
       setLoading(false);
       setOpen(false);
@@ -121,7 +121,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="Size name" {...field} />
+                    <Input disabled={loading} placeholder="attribute name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -134,7 +134,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({
                 <FormItem>
                   <FormLabel>Value</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="Size value" {...field} />
+                    <Input disabled={loading} placeholder="Attribute value" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { Trash } from "lucide-react"
-import { Category, Color, Image, Product, Size } from "@prisma/client"
+import { Category, Image, Product } from "@prisma/client"
 import { useParams, useRouter } from "next/navigation"
 
 import { Input } from "@/components/ui/input"
@@ -51,8 +51,8 @@ interface ProductFormProps {
     images: Image[]
   } | null;
   categories: Category[];
-  colors: Color[];
-  sizes: Size[];
+  // colors: Color[];
+  // sizes: Size[];
 };
 
 
@@ -60,8 +60,8 @@ interface ProductFormProps {
 export const ProductForm: React.FC<ProductFormProps> = ({
   initialData,
   categories,
-  sizes,
-  colors
+  // sizes,
+  // colors
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -219,7 +219,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="sizeId"
               render={({ field }) => (
@@ -262,7 +262,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="isFeatured"

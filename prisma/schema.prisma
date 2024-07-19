@@ -17,9 +17,8 @@ model Store {
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[]  @relation("StoreToCategory")
   products   Product[]   @relation("StoreToProduct")
-  sizes      Size[]      @relation("StoreToSize")
-  colors     Color[]     @relation("StoreToColor")
   orders     Order[]     @relation("StoreToOrder")
+  Attributes Attribute[] @relation("StoreToAttribute")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
@@ -70,12 +69,9 @@ model Product {
   name        String
   description String      @default("")
   price       Decimal
+  variants    Variant[]   @relation("ProductToVariant")
   isFeatured  Boolean     @default(false)
   isArchived  Boolean     @default(false)
-  sizeId      String // Foreign Key to Size
-  size        Size        @relation(fields: [sizeId], references: [id])
-  colorId     String // Foreign Key to Color
-  color       Color       @relation(fields: [colorId], references: [id])
   images      Image[] // Relation to Image model
   orderItems  OrderItem[] // Relation to Order model
   createdAt   DateTime    @default(now())
@@ -83,8 +79,6 @@ model Product {
 
   @@index([storeId])
   @@index([categoryId])
-  @@index([sizeId])
-  @@index([colorId])
 }
 
 model Image {
@@ -98,12 +92,56 @@ model Image {
   @@index([productId])
 }
 
-enum OrderStatus {
-  PENDING
-  PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELLED
+model Variant {
+  id              String             @id @default(uuid())
+  productId       String // Foreign Key to Product
+  product         Product            @relation("ProductToVariant", fields: [productId], references: [id])
+  sku             String             @unique
+  additionalPrice Decimal            @default(0.0)
+  stockQuantity   Int                @default(0)
+  attributes      VariantAttribute[] @relation("VariantToVariantAttribute")
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@index([productId])
+}
+
+model VariantAttribute {
+  id               String         @id @default(uuid())
+  variantId        String // Foreign Key to Variant
+  variant          Variant        @relation("VariantToVariantAttribute", fields: [variantId], references: [id])
+  attributeValueId String // Foreign Key to AttributeValue
+  attributeValue   AttributeValue @relation("AttributeValueToVariantAttribute", fields: [attributeValueId], references: [id])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@index([variantId])
+  @@index([attributeValueId])
+}
+
+model AttributeValue {
+  id          String             @id @default(uuid())
+  attributeId String // Foreign Key to Attribute
+  attribute   Attribute          @relation(fields: [attributeId], references: [id])
+  name        String
+  value       String
+  variants    VariantAttribute[] @relation("AttributeValueToVariantAttribute")
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([attributeId])
+}
+
+model Attribute {
+  id        String           @id @default(uuid())
+  storeId   String // Foreign Key to Store
+  store     Store            @relation("StoreToAttribute", fields: [storeId], references: [id])
+  name      String
+  values    AttributeValue[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@index([storeId])
 }
 
 model Order {
@@ -124,6 +162,14 @@ model Order {
   @@index([storeId])
 }
 
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
 // Intermediary for a many-to-many relationship-- size should be added here the ordered item's color too
 model OrderItem {
   id        String  @id @default(uuid())
@@ -133,34 +179,8 @@ model OrderItem {
   product   Product @relation(fields: [productId], references: [id])
   size      String  @default("")
   color     String  @default("")
-  quantity  Decimal     @default(1)
+  quantity  Decimal @default(1)
 
   @@index([orderId])
   @@index([productId])
-}
-
-model Size {
-  id        String    @id @default(uuid())
-  storeId   String // Foreign Key to Store
-  store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
-  name      String
-  value     String
-  products  Product[] // Relation to Product model
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@index([storeId])
-}
-
-model Color {
-  id        String    @id @default(uuid())
-  storeId   String // Foreign Key to Store
-  store     Store     @relation("StoreToColor", fields: [storeId], references: [id])
-  name      String
-  value     String
-  products  Product[] // Relation to Product model
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@index([storeId])
 }

@@ -19,7 +19,7 @@ export function MainNav({
         },
         {
             href: `/store/${params.storeId}/billboards`,
-            label: 'Billboards',
+            label: 'Couvertures',
             active: pathname === `/store/${params.storeId}/billboards`,
         },
         {
@@ -28,14 +28,9 @@ export function MainNav({
             active: pathname === `/store/${params.storeId}/categories`,
         },
         {
-            href: `/store/${params.storeId}/sizes`,
-            label: 'Sizes',
-            active: pathname === `/store/${params.storeId}/sizes`,
-        },
-        {
-            href: `/store/${params.storeId}/colors`,
-            label: 'Colors',
-            active: pathname === `/store/${params.storeId}/colors`,
+            href: `/store/${params.storeId}/attributes`,
+            label: 'Attributs',
+            active: pathname === `/store/${params.storeId}/attributes`,
         },
         {
             href: `/store/${params.storeId}/products`,

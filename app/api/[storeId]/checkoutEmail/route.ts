@@ -14,7 +14,7 @@ export async function POST(req: Request, { params }: { params: { storeId: string
             return new NextResponse("Order items are required", { status: 400 });
         }
 
-        // Create order in the database
+        // Create order in the database => extract into its a query function and take it out from the handler file here 
         const order = await prismadb.order.create({
             data: {
                 storeId: params.storeId,
@@ -38,7 +38,8 @@ export async function POST(req: Request, { params }: { params: { storeId: string
             },
         });
 
-        return NextResponse.json({ message: "Order created successfully" }, { status: 201 });
+        return NextResponse.json({ message: "Order created successfully" + order.id }, { status: 201 });
+        
 
     } catch (error) {
         console.error("Error processing order:", error);

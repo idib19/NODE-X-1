@@ -10,6 +10,9 @@ const ColorsPage = async ({
 }: {
   params: { storeId: string }
 }) => {
+
+  // get all colors : violation of the DIP dependency inversion principle
+  // front end should not know about the database 
   const colors = await prismadb.color.findMany({
     where: {
       storeId: params.storeId

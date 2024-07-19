@@ -9,13 +9,13 @@ import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { ApiList } from "@/components/ui/api-list";
 
-import { columns, SizeColumn } from "./columns";
+import { columns, AttributeColumn } from "./columns";
 
-interface SizesClientProps {
-  data: SizeColumn[];
+interface AttributesProps {
+  data: AttributeColumn[];
 }
 
-export const SizesClient: React.FC<SizesClientProps> = ({
+export const AttributesClient: React.FC<AttributesProps> = ({
   data
 }) => {
   const params = useParams();
@@ -24,16 +24,16 @@ export const SizesClient: React.FC<SizesClientProps> = ({
   return (
     <>
       <div className="flex items-center justify-between">
-        <Heading title={`Sizes (${data.length})`} description="Manage sizes for your products" />
-        <Button onClick={() => router.push(`/store/${params.storeId}/sizes/new`)}>
-          <Plus className="mr-2 h-4 w-4" /> Add New
+        <Heading title={`Attributs (${data.length})`} description="Gères les attributs de tes produits" />
+        <Button onClick={() => router.push(`/store/${params.storeId}/attributes/new`)}>
+          <Plus className="mr-2 h-4 w-4" /> Ajouter
         </Button>
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
-      <Heading title="API" description="API Calls for Sizes" />
+      <Heading title="API" description="API Calls for Attributes" />
       <Separator />
-      <ApiList entityName="sizes" entityIdName="sizeId" />
+      <ApiList entityName="attributes" entityIdName="attributeId" />
     </>
   );
 };
