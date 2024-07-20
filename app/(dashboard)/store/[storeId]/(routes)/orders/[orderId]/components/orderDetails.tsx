@@ -33,8 +33,6 @@ interface OrderDetailsProps {
                 price: Decimal;
                 isFeatured: boolean;
                 isArchived: boolean;
-                sizeId: string;
-                colorId: string;
                 createdAt: Date;
                 updatedAt: Date;
                 images: {

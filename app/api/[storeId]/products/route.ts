@@ -20,7 +20,7 @@ export async function POST(req: Request, { params }: { params: { storeId: string
     }
 
     const body = await req.json();
-    let { name, price, categoryId, colorId, sizeId, images, isFeatured, isArchived } = body;
+    let { name, price, categoryId,images, isFeatured, isArchived } = body;
 
     // Validate and Sanitize name
     if (typeof name !== "string") {
@@ -33,7 +33,7 @@ export async function POST(req: Request, { params }: { params: { storeId: string
       return new NextResponse("Invalid price: must be a non-negative number", { status: 400 });
     }
     // Sanitize and Validate UUIDs: categoryId, colorId, sizeId
-    [categoryId, colorId, sizeId].forEach(id => {
+    [categoryId].forEach(id => {
       if (!validator.isUUID(id)) {
         throw new Error("Invalid ID format");
       }
@@ -57,8 +57,6 @@ export async function POST(req: Request, { params }: { params: { storeId: string
         isFeatured,
         isArchived,
         categoryId,
-        colorId,
-        sizeId,
         storeId: sanitizedStoreId,
         images: {
           createMany: {
@@ -96,16 +94,12 @@ export async function GET(
       where: {
         storeId: params.storeId,
         categoryId,
-        colorId,
-        sizeId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
       },
       include: {
         images: true,
         category: true,
-        color: true,
-        size: true,
       },
       orderBy: {
         createdAt: 'desc',
