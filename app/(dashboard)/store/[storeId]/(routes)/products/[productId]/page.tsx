@@ -7,6 +7,8 @@ const ProductPage = async ({
 }: {
   params: { productId: string, storeId: string }
 }) => {
+
+  //! front end should not know about the db 
   const product = await prismadb.product.findUnique({
     where: {
       id: params.productId,
@@ -44,6 +46,7 @@ const ProductPage = async ({
           // sizes={sizes}
           initialData={product}
         />
+        {/* //product Variant here */}
       </div>
     </div>
   );
