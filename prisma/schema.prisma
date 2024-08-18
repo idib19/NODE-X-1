@@ -32,6 +32,15 @@ model User {
   @@index([storeId])
 }
 
+// we will separate the users from the buyers
+model ClientUser {
+  id          String @id @default(uuid())
+  name        String
+  age         Int
+  email       String
+  phoneNumber Int
+}
+
 model Billboard {
   id         String     @id @default(uuid())
   storeId    String
@@ -96,7 +105,6 @@ model Variant {
   id              String             @id @default(uuid())
   productId       String // Foreign Key to Product
   product         Product            @relation("ProductToVariant", fields: [productId], references: [id])
-  sku             String             @unique
   additionalPrice Decimal            @default(0.0)
   stockQuantity   Int                @default(0)
   attributes      VariantAttribute[] @relation("VariantToVariantAttribute")

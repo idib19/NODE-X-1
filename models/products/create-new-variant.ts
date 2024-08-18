@@ -3,13 +3,11 @@ import { Decimal } from "@prisma/client/runtime/library";
 
 const createVariant = async ({
   productId,
-  sku,
   additionalPrice,
   stockQuantity,
   attributeValueId
 }: {
   productId: string,
-  sku: string,
   additionalPrice: Decimal,
   stockQuantity: number,
   attributeValueId: string
@@ -17,7 +15,6 @@ const createVariant = async ({
   const newVariant = await prismadb.variant.create({
     data: {
       productId,
-      sku,
       additionalPrice,
       stockQuantity,
       attributes: {
@@ -35,6 +32,8 @@ const createVariant = async ({
 
   return newVariant;
 }
+
+
 
 // Example usage
 // const newVariant = await createVariant({

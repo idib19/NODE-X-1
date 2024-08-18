@@ -1,6 +1,9 @@
 import prismadb from "@/lib/prismadb";
-
 import { ProductForm } from "./components/product-form";
+import ProductVariant from "./components/product-variant";
+import { getVariantsForProduct } from "@/services/productService";
+import { convertPriceToNumber } from "@/providers/utils/convertDecimalToNumber";
+
 
 const ProductPage = async ({
   params
@@ -8,45 +11,34 @@ const ProductPage = async ({
   params: { productId: string, storeId: string }
 }) => {
 
-  //! front end should not know about the db 
-  const product = await prismadb.product.findUnique({
+  // Fetch the product details
+  const product = convertPriceToNumber(await prismadb.product.findUnique({
     where: {
       id: params.productId,
     },
     include: {
       images: true,
     }
-  });
+  }));
 
-  const categories = await prismadb.category.findMany({
+  // Fetch the categories
+  const categories = convertPriceToNumber(await prismadb.category.findMany({
     where: {
       storeId: params.storeId,
     },
-  });
+  }));
 
-  //!!! FTECH ALL ATTRIBUTE AND ATTRIBUTE VALUES INSTEAD 
-  // const sizes = await prismadb.size.findMany({
-  //   where: {
-  //     storeId: params.storeId,
-  //   },
-  // });
+  // Fetch the variants for the product
+  const variants = await getVariantsForProduct(params.productId);
 
-  // const colors = await prismadb.color.findMany({
-  //   where: {
-  //     storeId: params.storeId,
-  //   },
-  // });
-
-  return ( 
+  return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <ProductForm 
-          categories={categories} 
-          // colors={colors}
-          // sizes={sizes}
+        <ProductForm
+          categories={categories}
           initialData={product}
         />
-        {/* //product Variant here */}
+          <ProductVariant/>
       </div>
     </div>
   );
