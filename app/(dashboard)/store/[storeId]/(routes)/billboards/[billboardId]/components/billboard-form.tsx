@@ -47,10 +47,10 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const title = initialData ? "Edit billbord" : "Create billboard";
-    const description = initialData ? "Edit a billboard" : "Add a new billboard";
+    const title = initialData ? "Modifier billbord" : "Create billboard";
+    const description = initialData ? "Modifier a billboard" : "Add a new billboard";
     const toastMessage = initialData ? "Billboard updated" : "Billboard created";
-    const action = initialData ? "Save changes" : "Create";
+    const action = initialData ? "Enregistrer" : "Create";
 
     const form = useForm<BillboardFormValues>({
         resolver: zodResolver(formSchema),
@@ -157,7 +157,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => 
                             name="label"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel> Label </FormLabel>
+                                    <FormLabel> libellé </FormLabel>
                                     <FormControl>
                                         <Input disabled={loading} placeholder="Billboard label" {...field} />
                                     </FormControl>

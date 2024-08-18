@@ -95,8 +95,8 @@ export const SettingsForm: React.FC<SettingsProps> = ({ initialData }) => {
 
             <div className="flex items-center justify-between">
                 <Heading
-                    title="Settings"
-                    description="Manage store preferences"
+                    title="Paramètres"
+                    description="Gérer les préférences de la boutique"
                 />
 
                 <Button disabled={loading} variant="destructive" size="icon" onClick={() => setOpen(true)}>
@@ -116,7 +116,7 @@ export const SettingsForm: React.FC<SettingsProps> = ({ initialData }) => {
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel> Name </FormLabel>
+                                    <FormLabel> Nom </FormLabel>
                                     <FormControl>
                                         <Input disabled={loading} placeholder="Store name" {...field} />
                                     </FormControl>

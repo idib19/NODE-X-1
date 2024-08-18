@@ -24,9 +24,9 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({
   return (
     <> 
       <div className="flex items-center justify-between">
-        <Heading title={`Products (${data.length})`} description="Manage products for your store" />
+        <Heading title={`Produits (${data.length})`} description="Gérer les produits de votre boutique" />
         <Button onClick={() => router.push(`/store/${params.storeId}/products/new`)}>
-          <Plus className="mr-2 h-4 w-4" /> Add New {/*to test with tis current route config*/}
+          <Plus className="mr-2 h-4 w-4" /> Ajouter Nouveau {/*to test with tis current route config*/}
         </Button>
       </div>
       <Separator />

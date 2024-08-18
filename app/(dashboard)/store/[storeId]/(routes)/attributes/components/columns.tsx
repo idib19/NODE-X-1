@@ -14,7 +14,7 @@ export type AttributeColumn = {
 export const columns: ColumnDef<AttributeColumn>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Nom",
   },
   // {
   //   accessorKey: "value",

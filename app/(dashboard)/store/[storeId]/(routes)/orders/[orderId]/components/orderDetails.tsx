@@ -77,8 +77,8 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                                         <TableHead className="w-[80px] hidden md:table-cell">Image</TableHead>
                                         <TableHead className="max-w-[150px]">Name</TableHead>
                                         <TableHead>Options</TableHead>
-                                        <TableHead>Quantity</TableHead>
-                                        <TableHead>Price</TableHead>
+                                        <TableHead>quantité</TableHead>
+                                        <TableHead>Prix</TableHead>
                                         <TableHead>Total</TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -116,11 +116,11 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                         </CardHeader>
                         <CardContent className="grid gap-4">
                             <div className="flex items-center">
-                                <div>Subtotal</div>
+                                <div>sous-total</div>
                                 <div className="ml-auto">${totalCost.toString()}</div>
                             </div>
                             <div className="flex items-center">
-                                <div>Discount</div>
+                                <div>remise</div>
                                 <div className="ml-auto">-$0.00</div>
                             </div>
                             <Separator />
