@@ -28,23 +28,23 @@ type Status = {
 
 const statuses: Status[] = [
     {
-        value: "PENDING",
+        value: "En attente",
         label: "PENDING",
     },
     {
-        value: "PROCESSING",
+        value: "traitement",
         label: "PROCESSING",
     },
     {
-        value: "SHIPPED",
+        value: "expédié",
         label: "SHIPPED",
     },
     {
-        value: "DELIVERED",
+        value: "livré",
         label: "DELIVERED",
     },
     {
-        value: "CANCELED",
+        value: "annulé",
         label: "CANCELLED",
     },
 ]
@@ -61,6 +61,7 @@ export function ComboboxPopover() {
                 <PopoverTrigger asChild>
                     <Button variant="outline" className="w-[150px] justify-start">
                         {orderStatus ? <>{orderStatus}</> : <> PENDING</>}
+                        
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="p-0" side="right" align="start">
