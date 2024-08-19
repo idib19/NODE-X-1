@@ -26,6 +26,41 @@ type Status = {
     label: string
 }
 
+// Define helper functions
+const getTextColor = (status : Status) => {
+    switch (status) {
+      case 'PENDING':
+        return 'black';
+      case 'CANCELLED':
+        return 'black';
+      case 'SHIPPED':
+        return 'black';
+      case 'Processing':
+        return 'black';
+      case 'Delivered':
+        return 'black';
+      default:
+        return 'black';
+    }
+  };
+  
+  const getBackgroundColor = (status : Status) => {
+    switch (status) {
+      case 'PENDING':
+        return '#d4edda'; // Light green
+      case 'CANCELLED':
+        return '#f8d7da'; // Light red
+      case 'SHIPPED':
+        return '#cce5ff'; // Light blue
+      case 'PROCESSING':
+        return '#fff3cd'; // Light orange
+      case 'DELIVERED':
+        return '#e2e3e5'; // Light gray
+      default:
+        return '#000000'; // Default light gray
+    }
+  };
+
 const statuses: Status[] = [
     {
         value: "En attente",
@@ -51,17 +86,22 @@ const statuses: Status[] = [
 
 export function ComboboxPopover() {
     const [open, setOpen] = React.useState(false)
-    const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(null)
+    const [selectedStatus, setSelectedStatus] = React.useState<any>(null)
 
     const {orderStatus, handleStatusChange} = useContext(OrderStatusContext)
+    
 
     return (
         <div className="flex items-center space-x-4 p-2">
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-[150px] justify-start">
+                    <Button variant="outline" className="w-[150px] justify-start"
+                        style={{
+                            backgroundColor: selectedStatus ? getBackgroundColor(selectedStatus) : '#FF000080',
+                            color: selectedStatus ? getTextColor(selectedStatus) : '#000000'
+                          }}
+                    >
                         {orderStatus ? <>{orderStatus}</> : <> PENDING</>}
-                        
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="p-0" side="right" align="start">
@@ -77,7 +117,14 @@ export function ComboboxPopover() {
                                         onSelect={(value) => {
                                             handleStatusChange(status.label)
                                             setOpen(false)
+                                            setSelectedStatus(status.label); // Update selected status
                                         }}
+                                        style={{
+                                            color: getTextColor(status.label),
+                                            backgroundColor: getBackgroundColor(status.label),padding: '5px', // Add padding for better appearance
+                                            marginInline : '15x',
+                                            borderRadius: '5px', // Optional: rounded corners
+                                          }}
                                     >
                                         {status.label}
                                     </CommandItem>
