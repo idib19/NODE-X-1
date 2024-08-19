@@ -2,7 +2,6 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Variant } from "@/types";
 
-
 interface VariantListProps {
     variants: Variant[];
 }
@@ -14,12 +13,16 @@ const VariantList: React.FC<VariantListProps> = ({ variants }) => (
             {variants.map((variant, index) => (
                 <Card key={index}>
                     <CardContent>
-                        {Object.entries(variant).map(([key, value]) => (
-                            key !== "quantity" && (
-                                <p key={key} className="text-muted-foreground">{key}: {value}</p>
-                            )
+                        {variant.attributes?.map((attribute, idx) => (
+                            <p key={idx} className="text-muted-foreground">
+                                {attribute.attributeName ? `${attribute.attributeName}: ` : ""}
+                                {attribute.attributeValue}
+                            </p>
                         ))}
                         <p className="text-muted-foreground">Quantité: {variant.quantity}</p>
+                        {variant.additionalPrice !== undefined && (
+                            <p className="text-muted-foreground">Prix Additionnel: {variant.additionalPrice}</p>
+                        )}
                     </CardContent>
                 </Card>
             ))}

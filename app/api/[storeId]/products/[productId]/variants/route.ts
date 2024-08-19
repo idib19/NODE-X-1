@@ -1,25 +1,32 @@
 import { NextResponse } from 'next/server';
 import prismadb from '@/lib/prismadb';
-import { auth } from '@clerk/nextjs';
 
 export async function POST(req: Request, { params }: { params: { productId: string } }) {
-  const { variant } = await req.json();
+  
+  const body = await req.json();
+  
   const { productId } = params;
 
   try {
     const newVariant = await prismadb.variant.create({
       data: {
         productId: productId,
-        additionalPrice: variant.additionalPrice,
-        stockQuantity: variant.quantity,
+        additionalPrice: body.additionalPrice || 0,
+        stockQuantity: body.quantity || 0,
         attributes: {
-          create: variant.attributes.map((attribute: any) => ({
-            attributeValueId: attribute.attributeValueId,
+          create: body.attributes.map((attribute: any) => ({
+            attributeValue: {
+              connect: { id: attribute.attributeValueId } // Connect existing AttributeValue by ID
+            }
           })),
         },
       },
       include: {
-        attributes: true,
+        attributes: {
+          include: {
+            attributeValue: true, // Include the connected attribute values
+          },
+        },
       },
     });
 
@@ -29,6 +36,7 @@ export async function POST(req: Request, { params }: { params: { productId: stri
     return NextResponse.json({ error: 'Failed to add variant' }, { status: 500 });
   }
 }
+
 
 export async function GET(req: Request, { params }: { params: { productId: string } }) {
   const { productId } = params;
@@ -53,5 +61,34 @@ export async function GET(req: Request, { params }: { params: { productId: strin
   } catch (error) {
     console.error('Failed to fetch variants:', error);
     return NextResponse.json({ error: 'Failed to fetch variants' }, { status: 500 });
+  }
+}
+
+// this handler is to delete all variants for a specific product  
+export async function DELETE(req: Request, { params }: { params: { productId: string } }) {
+
+  const { productId } = params;
+
+  try {
+    // First, delete the VariantAttribute records associated with the Variants
+    await prismadb.variantAttribute.deleteMany({
+      where: {
+        variant: {
+          productId: productId,
+        },
+      },
+    });
+
+    // Now delete the Variants themselves
+    const deletedVariants = await prismadb.variant.deleteMany({
+      where: {
+        productId: productId,
+      },
+    });
+
+    return NextResponse.json({ count: deletedVariants.count }, { status: 200 });
+  } catch (error) {
+    console.log('[VARIANTS_DELETE]', error);
+    return NextResponse.json({ error: 'Failed to delete variants' }, { status: 500 });
   }
 }

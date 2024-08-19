@@ -9,9 +9,17 @@ import { useProductVariants } from "@/hooks/useProductVariants";
 import { Attribute } from "@/types";
 
 const attributes: Attribute[] = [
-    { id: "1", name: "Taille", values: ["S", "M", "L", "XL"] },
+    {
+        id: "e7ca3a34-cbcf-4ab2-9c31-0fd388a55803",
+        name: "Tailles",
+        values: [
+            { id: "48f42b15-e850-448d-99a5-894693b0aba9", name: "Moyen", value: "M" },
+            { id: "ed91def4-b81e-4411-8465-7707dc5a56ae", name: "Petit", value: "S" },
+            { id: "b1541a04-4b04-42ed-af93-365a45a9e1da", name: "Grand", value: "L" },
+            { id: "e910330a-ac88-40e0-89bd-b6c6082f3d98", name: "Très Grand", value: "XL" },
+        ]
+    },
 ];
-
 const ProductVariant: React.FC = () => {
     const { variants, newVariant, handleVariantChange, handleAddVariant } = useProductVariants();
 

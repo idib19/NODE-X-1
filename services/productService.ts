@@ -42,28 +42,30 @@ interface VariantBackEndWithAttributes extends VariantBackEnd {
 }
 
 
-//  utility function to map oover vaiants and create a version adapted to the frontend
+// Utility function to map over variants and create a version adapted to the frontend
 const mapVariantsBackEndToFrontEnd = (variants: VariantBackEndWithAttributes[]): Variant[] => {
   return variants.map((variant) => {
+    // Initialize the mapped variant with the quantity and additional attributes
     const mappedVariant: Variant = {
       quantity: variant.stockQuantity,
-      additionalPrice: Number(variant.additionalPrice), // Convert Decimal to a number
+      attributes: [], // Initialize attributes as an empty array
     };
 
-    // Map attributes to dynamic keys
+    // Map backend attributes to the frontend structure
     variant.attributes.forEach((variantAttribute) => {
-      const attributeName = variantAttribute.attributeValue.attribute.name; // Get the attribute name
-      const attributeValue = variantAttribute.attributeValue.value; // Get the attribute value
+      const attribute = {
+        attributeName: variantAttribute.attributeValue.attribute.name,  // Get attribute name
+        attributeValue: variantAttribute.attributeValue.value,          // Get attribute value
+        attributeValueId: variantAttribute.attributeValueId,            // Retain the attribute value ID if needed
+      };
 
-      // Assign the dynamic key and value to the mapped variant object
-      mappedVariant[attributeName] = attributeValue;
+      // Push the attribute object into the attributes array
+      mappedVariant.attributes.push(attribute);
     });
 
     return mappedVariant;
   });
 };
-
-
 
 // Service function to get variants for a product
 export const getVariantsForProduct = async (productId: string): Promise<Variant[]> => {
@@ -91,8 +93,11 @@ export const getVariantsForProduct = async (productId: string): Promise<Variant[
   }
 };
 
+
 // Example function for creating a variant
 export const createVariantByCallingApi = async (productId: string, variantData: Variant) => {
+
+ 
   try {
     const response = await fetch(`http://localhost:3000/api/5601a131-affb-4108-9135-38450c4918d0/products/${productId}/variants`, {
       method: 'POST',
