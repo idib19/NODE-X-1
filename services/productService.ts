@@ -47,6 +47,7 @@ const mapVariantsBackEndToFrontEnd = (variants: VariantBackEndWithAttributes[]):
   return variants.map((variant) => {
     // Initialize the mapped variant with the quantity and additional attributes
     const mappedVariant: Variant = {
+      id: variant.id,
       quantity: variant.stockQuantity,
       attributes: [], // Initialize attributes as an empty array
     };
@@ -95,9 +96,7 @@ export const getVariantsForProduct = async (productId: string): Promise<Variant[
 
 
 // Example function for creating a variant
-export const createVariantByCallingApi = async (productId: string, variantData: Variant) => {
-
- 
+export const createVariantByCallingApi = async (productId: string, variantData: Variant): Promise<string> => {
   try {
     const response = await fetch(`http://localhost:3000/api/5601a131-affb-4108-9135-38450c4918d0/products/${productId}/variants`, {
       method: 'POST',
@@ -107,7 +106,6 @@ export const createVariantByCallingApi = async (productId: string, variantData: 
       body: JSON.stringify(variantData),
     });
 
-    // Check if the request was successful
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(
@@ -115,15 +113,22 @@ export const createVariantByCallingApi = async (productId: string, variantData: 
       );
     }
 
-    // Parse the JSON response
     const data = await response.json();
-    return data; // Return the created variant or success message
+    return data.id;  // Return only the id of the created variant
   } catch (error) {
-    // Log the error for debugging
     console.error('Error creating variant:', error);
-
-    // Re-throw the error so that it can be handled by the calling function/component
     throw error;
+  }
+};
+
+
+export const deleteVariantById = async (productId: string, variantId: string): Promise<void> => {
+  const response = await fetch(`http://localhost:3000/api/5601a131-affb-4108-9135-38450c4918d0/products/${productId}/variants/${variantId}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete variant');
   }
 };
 

@@ -2,13 +2,14 @@
 
 // For displaying a variant
 export interface Variant {
+  id?: string;  // New id field
   quantity: number;
-  additionalPrice?: number;
   attributes: {
-      attributeName?: string;
-      attributeValue?: string;
-      attributeValueId: string;
+    attributeName: string;
+    attributeValue: string;
+    attributeValueId: string;
   }[];
+  additionalPrice?: number;
 }
 
 

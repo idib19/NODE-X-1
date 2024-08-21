@@ -21,8 +21,10 @@ const attributes: Attribute[] = [
     },
 ];
 const ProductVariant: React.FC = () => {
-    const { variants, newVariant, handleVariantChange, handleAddVariant } = useProductVariants();
+    const { variants, newVariant, handleVariantChange, handleAddVariant, handleDeleteVariant } = useProductVariants();
 
+    console.log(variants)
+    
     return (
         <div className="max-w-4xl mx-auto p-6 sm:p-8">
             <div className="grid gap-6">
@@ -41,7 +43,10 @@ const ProductVariant: React.FC = () => {
                         />
                     </CardContent>
                 </Card>
-                <VariantList variants={variants} />
+                <VariantList 
+                variants={variants} 
+                onDelete={handleDeleteVariant}
+                />
             </div>
         </div>
     );
