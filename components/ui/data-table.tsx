@@ -20,17 +20,34 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  searchKey:string
-}
-
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
+// Define Status type
+type Status = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
 
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  searchKey: string
+}
+
+const getBackgroundColor = (status: Status): string => {
+  switch (status) {
+    case 'PENDING':
+      return '#d4edda'; // Light green
+    case 'CANCELLED':
+      return '#f8d7da'; // Light red
+    case 'SHIPPED':
+      return '#cce5ff'; // Light blue
+    case 'PROCESSING':
+      return '#fff3cd'; // Light orange
+    case 'DELIVERED':
+      return '#e2e3e5'; // Light gray
+    default:
+      return '#ffffff'; // Default white
+  }
+};
 
 export function DataTable<TData, TValue>({
   columns,
@@ -48,7 +65,7 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       columnFilters,
-    }
+    },
   })
 
   return (
@@ -63,35 +80,44 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
+      <div className="rounded-md border border-gray-300 shadow-sm">
+        <Table className="min-w-full divide-y divide-gray-200">
+          <TableHeader className="bg-gray-100">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className="px-4 py-2 text-left text-sm font-medium text-gray-700"
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                    </TableHead>
-                  )
-                })}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="bg-white">
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  className={`hover:bg-gray-50 ${row.getIsSelected() ? "bg-blue-50" : ""}`}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className="px-4 py-2 text-sm text-gray-700"
+                      style={
+                        cell.column.id === 'status' 
+                          ? { backgroundColor: getBackgroundColor(cell.getValue() as Status) } 
+                          : {}
+                      }
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -99,7 +125,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell colSpan={columns.length} className="h-24 text-center text-gray-500">
                   No results.
                 </TableCell>
               </TableRow>

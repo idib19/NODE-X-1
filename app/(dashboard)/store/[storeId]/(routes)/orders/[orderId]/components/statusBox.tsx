@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/popover"
 
 import { OrderStatusContext } from "@/providers/utils/orderStatusProvider"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 
 // Define Status as a union of string literals
 type Status = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
@@ -48,8 +48,6 @@ const getBackgroundColor = (status: Status): string => {
             return '#fff3cd'; // Light orange
         case 'DELIVERED':
             return '#e2e3e5'; // Light gray
-        default:
-            return '#000000'; // Default black
     }
 };
 
@@ -83,6 +81,21 @@ export function ComboboxPopover() {
 
     const { orderStatus, handleStatusChange } = useContext(OrderStatusContext)
 
+    // Load the saved status from localStorage on component mount
+    useEffect(() => {
+        const savedStatus = localStorage.getItem('selectedStatus') as Status | null;
+        if (savedStatus) {
+            setSelectedStatus(savedStatus);
+        }
+    }, []);
+
+    // Save the status to localStorage whenever it changes
+    useEffect(() => {
+        if (selectedStatus) {
+            localStorage.setItem('selectedStatus', selectedStatus);
+        }
+    }, [selectedStatus]);
+
     return (
         <div className="flex items-center space-x-4 p-2">
             <Popover open={open} onOpenChange={setOpen}>
@@ -93,7 +106,7 @@ export function ComboboxPopover() {
                             color: selectedStatus ? getTextColor(selectedStatus) : '#000000'
                         }}
                     >
-                        {orderStatus ? <>{orderStatus}</> : <>PENDING</>}
+                        {selectedStatus}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="p-0" side="right" align="start">
