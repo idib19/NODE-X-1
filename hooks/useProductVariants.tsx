@@ -1,6 +1,6 @@
 // hooks/useProductVariants.ts
 import { useState, useEffect } from "react";
-import { createVariantByCallingApi, deleteVariantById, getVariantsForProduct } from "@/services/productService";
+import { createVariantByCallingApi, deleteVariantById, getVariantsForProduct } from "@/services/variantService";
 import { useParams } from 'next/navigation';
 import { Variant, Attribute } from "@/types";
 import { toast } from "react-hot-toast"

@@ -1,7 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { ProductForm } from "./components/product-form";
 import ProductVariant from "./components/product-variant";
-import { getVariantsForProduct } from "@/services/productService";
+import { getVariantsForProduct } from "@/services/variantService";
 import { convertPriceToNumber } from "@/providers/utils/convertDecimalToNumber";
 
 
@@ -11,7 +11,7 @@ const ProductPage = async ({
   params: { productId: string, storeId: string }
 }) => {
 
-  // Fetch the product details
+  // Fetch the product details using service 
   const product = convertPriceToNumber(await prismadb.product.findUnique({
     where: {
       id: params.productId,
