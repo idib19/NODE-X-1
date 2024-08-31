@@ -7,42 +7,64 @@ export async function OPTIONS() {
 
 export async function POST(req: Request, { params }: { params: { storeId: string } }) {
     try {
-        const { orderItemsData, data } = await req.json();
+        const { orderItemsData, data, clientId } = await req.json();
 
         // Validate required fields
         if (!orderItemsData || orderItemsData.length === 0) {
-            return new NextResponse("Order items are required", { status: 400 });
+            // More explicit error message for missing order items
+            return new NextResponse("Order items are required to create an order.", { status: 400 });
         }
 
-        // Create order in the database => extract into its a query function and take it out from the handler file here 
+        // Ensuring clientId is present before proceeding
+        if (!clientId) {
+            // Changed status code to 401 for unauthorized requests which lack clientId
+            return NextResponse.json({ message: "Unauthorized request: clientId is required." }, { status: 401 });
+        }
+
+        // Additional validation could include checking for the presence of other necessary data
+        if (!data.name || !data.address || !data.phone || !data.email) {
+            return new NextResponse("All customer details must be provided.", { status: 400 });
+        }
+
+        // Consider wrapping the orderItemsData mapping in a try-catch block to handle potential issues specifically
+        let createdOrderItems;
+        try {
+            createdOrderItems = orderItemsData.map((item: { productId: string, options: { size: string, color: string } }) => ({
+                product: { connect: { id: item.productId } },
+                size: item.options.size,
+                color: item.options.color
+            }));
+        } catch (error) {
+            console.error("Error processing order items:", error);
+            return new NextResponse("Invalid order item data provided.", { status: 400 });
+        }
+
+        // Database operation to create an order
         const order = await prismadb.order.create({
             data: {
                 storeId: params.storeId,
-                isPaid: false,
+                isPaid: false, // Consider if this should also be part of the input data
                 name: data.name,
                 phone: data.phone,
                 address: data.address,
                 email: data.email,
-                clientId: data.clientId,
+                clientId: clientId,
                 orderItems: {
-                    create: orderItemsData.map((item: { productId: string, options: { size: string, color: string } }) => ({
-                        product: {
-                            connect: {
-                                id: item.productId,
-                            },
-                        },
-                        size: item.options.size,
-                        color: item.options.color
-                    })),
+                    create: createdOrderItems
                 },
             },
         });
 
-        return NextResponse.json({ message: "Order created successfully" + order.id }, { status: 201 });
-        
+        // Response to indicate successful creation, including order ID and client ID
+        return NextResponse.json({
+            message: "Order created successfully",
+            orderId: order.id,
+            clientId: clientId
+        }, { status: 201 });
 
     } catch (error) {
         console.error("Error processing order:", error);
-        return new NextResponse("Internal Server Error", { status: 500 });
+        // Provide a more descriptive server error message
+        return new NextResponse("Internal server error while processing the order.", { status: 500 });
     }
 }
