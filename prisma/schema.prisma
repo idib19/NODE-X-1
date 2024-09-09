@@ -10,18 +10,29 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Store {
-  id         String      @id @default(uuid())
-  name       String
-  users      User[]      @relation("StoreToUser")
-  billboards Billboard[] @relation("StoreToBillboard")
-  categories Category[]  @relation("StoreToCategory")
-  products   Product[]   @relation("StoreToProduct")
-  orders     Order[]     @relation("StoreToOrder")
-  Attributes Attribute[] @relation("StoreToAttribute")
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+
+enum Currency {
+  EUR   // Euro
+  USD   // US Dollar
+  CAD   // Canadian Dollar
+  FCFA  // CFA Franc BEAC
+  YEN   // Japanese Yen
 }
+
+model Store {
+  id          String      @id @default(uuid())
+  name        String
+  currency    Currency    @default(FCFA)  // Default currency set to FCFA
+  users       User[]      @relation("StoreToUser")
+  billboards  Billboard[] @relation("StoreToBillboard")
+  categories  Category[]  @relation("StoreToCategory")
+  products    Product[]   @relation("StoreToProduct")
+  orders      Order[]     @relation("StoreToOrder")
+  Attributes  Attribute[] @relation("StoreToAttribute")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
 
 model User {
   id      String @id @default(uuid())
@@ -158,7 +169,7 @@ model Order {
   store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
   orderItems OrderItem[] // Relation to OrderItem model
   isPaid     Boolean     @default(false)
-  clientId   String      
+  clientId   String
   name       String      @default("")
   phone      String      @default("")
   email      String      @default("")
