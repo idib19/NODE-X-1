@@ -10,29 +10,27 @@ datasource db {
   relationMode = "prisma"
 }
 
-
 enum Currency {
-  EUR   // Euro
-  USD   // US Dollar
-  CAD   // Canadian Dollar
-  FCFA  // CFA Franc BEAC
-  YEN   // Japanese Yen
+  EUR // Euro
+  USD // US Dollar
+  CAD // Canadian Dollar
+  FCFA // CFA Franc BEAC
+  YEN // Japanese Yen
 }
 
 model Store {
-  id          String      @id @default(uuid())
-  name        String
-  currency    Currency    @default(FCFA)  // Default currency set to FCFA
-  users       User[]      @relation("StoreToUser")
-  billboards  Billboard[] @relation("StoreToBillboard")
-  categories  Category[]  @relation("StoreToCategory")
-  products    Product[]   @relation("StoreToProduct")
-  orders      Order[]     @relation("StoreToOrder")
-  Attributes  Attribute[] @relation("StoreToAttribute")
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id         String      @id @default(uuid())
+  name       String
+  currency   Currency    @default(FCFA) // Default currency set to FCFA
+  users      User[]      @relation("StoreToUser")
+  billboards Billboard[] @relation("StoreToBillboard")
+  categories Category[]  @relation("StoreToCategory")
+  products   Product[]   @relation("StoreToProduct")
+  orders     Order[]     @relation("StoreToOrder")
+  Attributes Attribute[] @relation("StoreToAttribute")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }
-
 
 model User {
   id      String @id @default(uuid())
@@ -177,16 +175,9 @@ model Order {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   status     OrderStatus @default(PENDING)
+  totalPrice Decimal     @default(0)
 
   @@index([storeId])
-}
-
-enum OrderStatus {
-  PENDING
-  PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELLED
 }
 
 // Intermediary for a many-to-many relationship-- size should be added here the ordered item's color too
@@ -199,7 +190,18 @@ model OrderItem {
   size      String  @default("")
   color     String  @default("")
   quantity  Decimal @default(1)
+  price     Decimal @default(0)
 
   @@index([orderId])
   @@index([productId])
+}
+
+
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }

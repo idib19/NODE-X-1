@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
-
 import prismadb from "@/lib/prismadb";
 import { isAuthorised } from "@/permissions/checkStorePermission";
+
+
+// Function to calculate total price
+const calculateTotalPrice = (order: any) => {
+    return order.orderItems.reduce((total: any, item: any) => {
+        return total + (item.product.price.toNumber() * item.quantity.toNumber());
+    }, 0);
+};
 
 export async function GET(
     req: Request,
@@ -13,28 +20,32 @@ export async function GET(
             return new NextResponse("Order id is required", { status: 400 });
         }
 
-        const order = await prismadb.order.findUnique({
+        const rawOrder = await prismadb.order.findUnique({
             where: {
-              id: params.orderId
+                id: params.orderId
             },
             include: {
-              orderItems: {
-                include: {
-                  product: {
+                orderItems: {
                     include: {
-                      images: true
+                        product: {
+                            include: {
+                                images: true
+                            }
+                        }
                     }
-                  }
                 }
-              }
             }
-          });
-        
-          
+        });
 
-        return NextResponse.json(order) ;
+        if (!rawOrder) {
+            return new NextResponse("Order not found", { status: 404 });
+        }
 
-        
+        const totalPrice = calculateTotalPrice(rawOrder);
+        const order = { ...rawOrder, totalPrice };
+
+        return NextResponse.json(order);
+
     } catch (error) {
         console.log('[ORDER_GET]', error);
         return new NextResponse("Internal error", { status: 500 });
