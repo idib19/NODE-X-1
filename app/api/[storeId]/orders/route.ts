@@ -9,7 +9,7 @@ const handleError = (message: string, status: number) => {
 
 // Validation function
 const validateInput = (userId: string, storeId: string) => {
-  if (!userId) throw new Error("Client ID is required");
+  if (!userId) throw new Error("User ID is required");
   if (!storeId) throw new Error("Store ID is required");
   if (!validator.isUUID(storeId)) throw new Error("Invalid Store ID format");
 };
@@ -38,7 +38,7 @@ export async function POST(
     return NextResponse.json(orders);
     
   } catch (error) {
-    console.error('[ORDERS_GET]', error);
+    console.error('[ORDERS_POST]', error);
     return handleError(error instanceof Error ? error.message : "Internal server error",
       error instanceof Error ? 400 : 500);
   }
