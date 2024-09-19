@@ -1,8 +1,6 @@
 import { format } from "date-fns";
 
 import prismadb from "@/lib/prismadb";
-import { formatter } from "@/lib/utils";
-
 import { ProductsClient } from "./components/client";
 import { ProductColumn } from "./components/columns";
 
@@ -23,15 +21,18 @@ const ProductsPage = async ({
     }
   });
 
+  
+
   const formattedProducts: ProductColumn[] = products.map((item) => ({
     id: item.id,
     name: item.name,
     isFeatured: item.isFeatured,
     isArchived: item.isArchived,
-    price: formatter.format(item.price.toNumber()),
+    price:item.price.toString(),
     category: item.category.name,
     createdAt: format(item.createdAt, 'MMMM do, yyyy'),
   }));
+
 
   return (
     <div className="flex-col">

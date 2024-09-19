@@ -10,3 +10,14 @@ export const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
 });
+
+export const createFormatter = (currency: string) => {
+  return new Intl.NumberFormat(
+    currency === 'FCFA' ? 'fr-FR' : currency === 'EUR' ? 'fr-FR' : 'en-US',
+    {
+      style: 'currency',
+      currency: currency === 'FCFA' ? 'XOF' : currency === 'DOLLAR' ? 'USD' : currency,
+      minimumFractionDigits: currency === 'FCFA' ? 0 : 2
+    }
+  );
+};

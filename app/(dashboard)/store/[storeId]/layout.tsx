@@ -4,7 +4,7 @@ import prismadb from "@/lib/prismadb";
 import Navbar from "@/components/navbar";
 import { NextResponse } from "next/server";
 import { checkPermission } from "@/permissions/checkStorePermission";
-
+import { CurrencyProvider } from "@/providers/currencyContext";
 export default async function DashboardLayout({ children, params }: { children: React.ReactNode; params: { storeId: string } }) {
     const { userId } = auth();
 
@@ -36,8 +36,11 @@ export default async function DashboardLayout({ children, params }: { children: 
     // Render children components if the user has permission
     return (
         <>
+            
             <Navbar/>
-            {children}
+            <CurrencyProvider storeId={storeId}>
+                {children}
+            </CurrencyProvider>
         </>
     );
 }

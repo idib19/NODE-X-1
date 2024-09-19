@@ -8,8 +8,7 @@ import { getTotalRevenue } from "@/actions/overview/get-total-revenue";
 import { getSalesCount } from "@/actions/overview/get-sales-count";
 import { getGraphRevenue } from "@/actions/overview/get-graph-revenue";
 import { getStockCount } from "@/actions/overview/get-stock-count";
-import { formatter } from "@/lib/utils";
-
+import Currency from "@/components/ui/currency";
 interface DashboardPageProps {
     params: {
         storeId: string;
@@ -27,23 +26,25 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({
     return (
         <div className="flex-col">
             <div className="flex-1 space-y-4 p-8 pt-6">
-                <Heading title="tableau de bord" description="Aperçu de votre boutique" />
+                <Heading title="Tableau de bord" description="Aperçu de votre boutique" />
                 <Separator />
                 <div className="grid gap-4 grid-cols-3">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
-                            Revenu total
+                                Revenu total
                             </CardTitle>
                             <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{formatter.format(totalRevenue)}</div>
+                            <div className="text-2xl font-bold">
+                                <Currency value={totalRevenue} />
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">ventes</CardTitle>
+                            <CardTitle className="text-sm font-medium">Ventes</CardTitle>
                             <CreditCard className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -62,7 +63,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({
                 </div>
                 <Card className="col-span-4">
                     <CardHeader>
-                        <CardTitle>aperçu</CardTitle>
+                        <CardTitle>Aperçu</CardTitle>
                     </CardHeader>
                     <CardContent className="pl-2">
                         <Overview data={graphRevenue} />

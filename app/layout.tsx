@@ -32,14 +32,15 @@ export default function RootLayout({
         <html lang="en">
 
           <body className={inter.className}>
+            
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
               enableSystem
             >
               <ToasterProvider />
-              <ModalProvider />
-              {children}
+                <ModalProvider />
+                {children}
 
             </ThemeProvider>
           </body>

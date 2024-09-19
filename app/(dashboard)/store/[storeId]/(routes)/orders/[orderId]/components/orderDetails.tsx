@@ -6,7 +6,7 @@ import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card"
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
 import { Separator } from "@/components/ui/separator"
 
-
+import Currency from "@/components/ui/currency"
 import { Decimal } from "@prisma/client/runtime/library"
 
 import { ComboboxPopover } from "./statusBox"
@@ -102,8 +102,12 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                                                 />
                                             </TableCell>
                                             <TableCell>{orderItem.quantity.toString()}</TableCell>
-                                            <TableCell>${orderItem.product.price.toString()}</TableCell>
-                                            <TableCell>${totalCost.toString()}</TableCell>
+                                            <TableCell>
+                                                <Currency value={orderItem.product.price.toNumber()} />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Currency value={orderItem.product.price.toNumber() * orderItem.quantity.toNumber()} />
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -116,17 +120,23 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                         </CardHeader>
                         <CardContent className="grid gap-4">
                             <div className="flex items-center">
-                                <div>sous-total</div>
-                                <div className="ml-auto">${totalCost.toString()}</div>
+                                <div>Total</div>
+                                <div className="ml-auto">
+                                    <Currency value={totalCost.toNumber()} />
+                                </div>
                             </div>
                             <div className="flex items-center">
-                                <div>remise</div>
-                                <div className="ml-auto">-$0.00</div>
+                                <div>Remise</div>
+                                <div className="ml-auto">
+                                    <Currency value={-0.00} />
+                                </div>
                             </div>
                             <Separator />
                             <div className="flex items-center font-medium">
-                                <div>Total</div>
-                                <div className="ml-auto">${totalCost.toString()}</div>
+                                <div>Total de la commande</div>
+                                <div className="ml-auto"> 
+                                    <Currency value={totalCost.toNumber()} />
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
