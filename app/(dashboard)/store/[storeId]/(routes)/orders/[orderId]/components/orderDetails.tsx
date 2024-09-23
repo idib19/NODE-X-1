@@ -100,7 +100,7 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                                             <TableCell className="flex gap-x-2"> {orderItem.size}
                                                 <div
                                                     className={`h-6 w-6 rounded-full border`}
-                                                    style={{ backgroundColor: orderItem.color.slice(1) }}
+                                                    style={{ backgroundColor: orderItem.color}}
                                                 />
                                             </TableCell>
                                             <TableCell>{orderItem.quantity.toString()}</TableCell>
