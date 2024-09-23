@@ -190,7 +190,7 @@ model OrderItem {
   size      String  @default("")
   color     String  @default("")
   quantity  Decimal @default(1)
-  price     Decimal @default(0)
+  newPrice     Decimal @default(0)
 
   @@index([orderId])
   @@index([productId])

@@ -41,6 +41,8 @@ interface OrderDetailsProps {
                 }[];
             };
             quantity: Decimal;
+            size: string;
+            color: string;
         }[];
     } | null;
 }
@@ -95,10 +97,10 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                                                 />
                                             </TableCell>
                                             <TableCell className="font-medium">{orderItem.product.name}</TableCell>
-                                            <TableCell className="flex gap-x-2"> M
+                                            <TableCell className="flex gap-x-2"> {orderItem.size}
                                                 <div
                                                     className={`h-6 w-6 rounded-full border`}
-                                                    style={{ backgroundColor: "FFFFFF" }}
+                                                    style={{ backgroundColor: orderItem.color.slice(1) }}
                                                 />
                                             </TableCell>
                                             <TableCell>{orderItem.quantity.toString()}</TableCell>
