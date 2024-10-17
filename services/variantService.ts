@@ -71,7 +71,7 @@ const mapVariantsBackEndToFrontEnd = (variants: VariantBackEndWithAttributes[]):
 // Service function to get variants for a product
 export const getVariantsForProduct = async (productId: string): Promise<Variant[]> => {
   try {
-    const response = await fetch(`http://localhost:3000/api/5601a131-affb-4108-9135-38450c4918d0/products/${productId}/variants`, {
+    const response = await fetch(`${URL}/${productId}/variants`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -95,9 +95,11 @@ export const getVariantsForProduct = async (productId: string): Promise<Variant[
 };
 
 
-// Example function for creating a variant
+// Service function to create a variant
 export const createVariantByCallingApi = async (productId: string, variantData: Variant): Promise<string> => {
   try {
+    
+
     const response = await fetch(`http://localhost:3000/api/5601a131-affb-4108-9135-38450c4918d0/products/${productId}/variants`, {
       method: 'POST',
       headers: {
@@ -106,7 +108,9 @@ export const createVariantByCallingApi = async (productId: string, variantData: 
       body: JSON.stringify(variantData),
     });
 
+
     if (!response.ok) {
+      console.error('Response not OK:', response.statusText);
       const errorData = await response.json();
       throw new Error(
         `Error ${response.status}: ${response.statusText}. ${errorData.message || 'An unknown error occurred.'}`
@@ -116,10 +120,10 @@ export const createVariantByCallingApi = async (productId: string, variantData: 
     const data = await response.json();
     return data.id;  // Return only the id of the created variant
   } catch (error) {
-    console.error('Error creating variant:', error);
+    console.error('Error creating variant:', error); 
     throw error;
   }
-};
+}; 
 
 
 export const deleteVariantById = async (productId: string, variantId: string): Promise<void> => {

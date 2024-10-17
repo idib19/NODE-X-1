@@ -98,17 +98,20 @@ export const useProductVariants = () => {
         return;
       }
     
-      const variantData: Variant = {
-        ...newVariant,
+      // Construct variantData with the desired structure
+      const variantData = {
         quantity: quantity,  // Ensure quantity is a number
-        attributes: newVariant.attributes!,
+        attributes: newVariant.attributes!.map(attr => ({
+          attributeValueId: attr.attributeValueId,  // Include only attributeValueId
+        })),
       } as Variant;
     
       setIsLoading(true);
     
+      
       try {
         const createdVariantId = await createVariantByCallingApi(productId, variantData);
-    
+        
         // Append the id to variantData
         const variantWithId: Variant = {
           ...variantData,
@@ -117,10 +120,10 @@ export const useProductVariants = () => {
     
         setVariants((prev) => [...prev, variantWithId]);  // Update the state with the new variant
         setNewVariant({ quantity: 1, attributes: [] });  // Reset the form
-        toast.success("Variant created successfully!");
+        toast.success("Variant ajouté avec succès !");
       } catch (error) {
         console.error("Error creating variant:", error);
-        toast.error("There was an error creating the variant. Please try again.");
+        toast.error("Une erreur est survenue lors de la création de la variante. Veuillez réessayer.");
       } finally {
         setIsLoading(false);
       }

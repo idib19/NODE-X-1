@@ -7,6 +7,18 @@ export async function POST(req: Request, { params }: { params: { productId: stri
   
   const { productId } = params;
 
+  // validate the request body
+  const { additionalPrice, quantity, attributes } = body;
+  if ( !quantity || !attributes) {
+    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+  }
+
+  // validate the attributes array
+  if (!Array.isArray(attributes)) {
+    return NextResponse.json({ error: 'Invalid attributes format' }, { status: 400 });
+  }
+
+
   try {
     const newVariant = await prismadb.variant.create({
       data: {
@@ -64,7 +76,8 @@ export async function GET(req: Request, { params }: { params: { productId: strin
   }
 }
 
-// this handler is to delete all variants for a specific product  
+// This handler is to delete all variants for a specific product  
+// it first deletes all the variant attributes and then the variants themselves because of the onDelete cascade
 export async function DELETE(req: Request, { params }: { params: { productId: string } }) {
 
   const { productId } = params;
@@ -79,7 +92,7 @@ export async function DELETE(req: Request, { params }: { params: { productId: st
       },
     });
 
-    // Now delete the Variants themselves
+    // then delete the Variants themselves
     const deletedVariants = await prismadb.variant.deleteMany({
       where: {
         productId: productId,

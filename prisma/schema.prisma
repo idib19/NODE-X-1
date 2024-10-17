@@ -94,6 +94,7 @@ model Product {
   orderItems  OrderItem[] // Relation to Order model
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  
 
   @@index([storeId])
   @@index([categoryId])

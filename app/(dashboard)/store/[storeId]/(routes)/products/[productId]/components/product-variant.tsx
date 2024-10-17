@@ -8,6 +8,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { useProductVariants } from "@/hooks/useProductVariants";
 import { Attribute } from "@/types";
 
+// this is not supposed to be static/ hardcoded, it should be dynamic and fetched from the database per store so that the user can choose the attribute they want to add to the variant
 const attributes: Attribute[] = [
     {
         id: "e7ca3a34-cbcf-4ab2-9c31-0fd388a55803",
@@ -20,10 +21,11 @@ const attributes: Attribute[] = [
         ]
     },
 ];
+
+
+
 const ProductVariant: React.FC = () => {
     const { variants, newVariant, handleVariantChange, handleAddVariant, handleDeleteVariant } = useProductVariants();
-
-    console.log(variants)
     
     return (
         <div className="max-w-4xl mx-auto p-6 sm:p-8">

@@ -117,6 +117,10 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                         </CardContent>
                     </Card>
                     <Card>
+
+
+
+                        
                         <CardHeader>
                             <CardTitle>Paiement</CardTitle>
                         </CardHeader>

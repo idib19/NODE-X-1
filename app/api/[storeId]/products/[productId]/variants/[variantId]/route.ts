@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import prismadb from '@/lib/prismadb'; // Ensure this is the correct path to your Prisma client instance
+import prismadb from '@/lib/prismadb';
 
+
+// This handler is to delete a specific variant for a specific product
 export async function DELETE(req: Request, { params }: { params: { productId: string; variantId: string } }) {
   const { variantId } = params;
 
