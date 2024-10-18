@@ -14,27 +14,29 @@ interface VariantFormProps {
 
 const VariantForm: React.FC<VariantFormProps> = ({ attributes, newVariant, onVariantChange, onAddVariant }) => (
   <form className="grid gap-4">
-    {attributes.map((attribute) => (
-      <div key={attribute.id} className="grid gap-2">
-        <Label htmlFor={attribute.name.toLowerCase()}>{attribute.name}</Label>
-        <Select
-          onValueChange={(value) => {
-            onVariantChange("attributes", value, attributes); // Pass attributeValueId directly
-          }}
-        >
-          <SelectTrigger className="w-24">
-            <SelectValue placeholder={`Sélectionnez ${attribute.name}`} />
-          </SelectTrigger>
-          <SelectContent>
-            {attribute.values.map((attrValue) => (
-              <SelectItem key={attrValue.id} value={attrValue.id}> {/* Use attribute value ID directly */}
-                {attrValue.value} {/* Display the value (e.g., "M", "L"), but store the ID */}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    ))}
+    <div className="flex gap-4"> {/* Added flex container for horizontal alignment */}
+      {attributes.map((attribute) => (
+        <div key={attribute.id} className="grid gap-2 p-2"> {/* Added padding */}
+          <Label htmlFor={attribute.name.toLowerCase()}>{attribute.name}</Label>
+          <Select
+            onValueChange={(value) => {
+              onVariantChange("attributes", value, attributes); // Pass attributeValueId directly
+            }}
+          >
+            <SelectTrigger className="w-24">
+              <SelectValue placeholder={`Sélectionnez ${attribute.name}`} />
+            </SelectTrigger>
+            <SelectContent>
+              {attribute.values.map((attrValue) => (
+                <SelectItem key={attrValue.id} value={attrValue.id}> {/* Use attribute value ID directly */}
+                  {attrValue.value} {/* Display the value (e.g., "M", "L"), but store the ID */}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      ))}
+    </div>
     <div className="grid gap-2">
       <Label htmlFor="quantity">Quantité</Label>
       <Input

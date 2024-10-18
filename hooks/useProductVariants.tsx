@@ -21,7 +21,6 @@ export const useProductVariants = () => {
             
             getVariantsForProduct(productId)
                 .then((data) => {
-                  console.log("Voici les variants retournees du serveur " + data)
                     setVariants(data);
                     setIsLoading(false);
                 })

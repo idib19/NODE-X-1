@@ -26,7 +26,7 @@ interface CurrencyProviderProps {
 export const CurrencyProvider: React.FC<CurrencyProviderProps> = ({ children, storeId }) => {
     const [currency, setCurrency] = useState('FCFA');
 
-    const URL = `${process.env.NEXT_PUBLIC_API_URL}/${storeId}/devise`
+    const URL = `${process.env.NEXT_PUBLIC_API_URL}/devise`
 
     // Load the store's default currency from the API or local storage when the app initializes
     useEffect(() => {
