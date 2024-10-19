@@ -100,7 +100,7 @@ export const createVariantByCallingApi = async (productId: string, variantData: 
   try {
     
 
-    const response = await fetch(`http://localhost:3000/api/5601a131-affb-4108-9135-38450c4918d0/products/${productId}/variants`, {
+    const response = await fetch(`${URL}/${productId}/variants`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ export const createVariantByCallingApi = async (productId: string, variantData: 
 
 
 export const deleteVariantById = async (productId: string, variantId: string): Promise<void> => {
-  const response = await fetch(`http://localhost:3000/api/5601a131-affb-4108-9135-38450c4918d0/products/${productId}/variants/${variantId}`, {
+  const response = await fetch(`${URL}/${productId}/variants/${variantId}`, {
     method: 'DELETE',
   });
 
