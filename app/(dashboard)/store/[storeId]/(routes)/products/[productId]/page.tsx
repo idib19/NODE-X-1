@@ -3,6 +3,7 @@ import { ProductForm } from "./components/product-form";
 import ProductVariant from "./components/product-variant";
 import { getVariantsForProduct } from "@/services/variantService";
 import { convertPriceToNumber } from "@/providers/utils/convertDecimalToNumber";
+import { getAttributesByStoreId } from "@/models/product-management/attributes/get-attribute-per-store";
 
 
 const ProductPage = async ({
@@ -31,6 +32,10 @@ const ProductPage = async ({
   // Fetch the variants for the product
   const variants = await getVariantsForProduct(params.productId);
 
+  // Fetch the attributes for the store
+  const attributes = await getAttributesByStoreId(params.storeId);
+
+
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
@@ -38,7 +43,7 @@ const ProductPage = async ({
           categories={categories}
           initialData={product}
         />
-          <ProductVariant/>
+          <ProductVariant attributes={attributes}/>
       </div>
     </div>
   );

@@ -15,10 +15,7 @@ export const useProductVariants = () => {
 
     
     useEffect(() => {
-        if (productId) {
-
-            console.log("le useffect fonctionne !!!!!")
-            
+        if (productId) {         
             getVariantsForProduct(productId)
                 .then((data) => {
                     setVariants(data);
@@ -28,6 +25,7 @@ export const useProductVariants = () => {
         }
 
     }, [productId]);
+    
 
     const handleVariantChange = (
       field: string,
@@ -74,7 +72,10 @@ export const useProductVariants = () => {
     };
     
     
-      
+    
+
+
+
     const handleAddVariant = async () => {
       if (!newVariant.attributes || newVariant.attributes.length === 0) {
         toast.error("Please select at least one attribute.");
@@ -111,12 +112,17 @@ export const useProductVariants = () => {
       try {
         const createdVariantId = await createVariantByCallingApi(productId, variantData);
         
-        // Append the id to variantData
+        // Construct the complete variant object with all necessary data
         const variantWithId: Variant = {
           ...variantData,
-          id: createdVariantId,  // Assign the newly created id to the variant
+          id: createdVariantId,
+          attributes: newVariant.attributes!.map(attr => ({
+            attributeName: attr.attributeName,
+            attributeValue: attr.attributeValue,
+            attributeValueId: attr.attributeValueId,
+          })),
         };
-    
+
         setVariants((prev) => [...prev, variantWithId]);  // Update the state with the new variant
         setNewVariant({ quantity: 1, attributes: [] });  // Reset the form
         toast.success("Variant ajouté avec succès !");

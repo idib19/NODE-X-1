@@ -3,7 +3,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Variant, Attribute } from "@/types";
+import { PlusCircle } from 'lucide-react';
 
 interface VariantFormProps {
   attributes: Attribute[];
@@ -13,41 +15,56 @@ interface VariantFormProps {
 }
 
 const VariantForm: React.FC<VariantFormProps> = ({ attributes, newVariant, onVariantChange, onAddVariant }) => (
-  <form className="grid gap-4">
-    <div className="flex gap-4"> {/* Added flex container for horizontal alignment */}
-      {attributes.map((attribute) => (
-        <div key={attribute.id} className="grid gap-2 p-2"> {/* Added padding */}
-          <Label htmlFor={attribute.name.toLowerCase()}>{attribute.name}</Label>
-          <Select
-            onValueChange={(value) => {
-              onVariantChange("attributes", value, attributes); // Pass attributeValueId directly
-            }}
-          >
-            <SelectTrigger className="w-24">
-              <SelectValue placeholder={`Sélectionnez ${attribute.name}`} />
-            </SelectTrigger>
-            <SelectContent>
-              {attribute.values.map((attrValue) => (
-                <SelectItem key={attrValue.id} value={attrValue.id}> {/* Use attribute value ID directly */}
-                  {attrValue.value} {/* Display the value (e.g., "M", "L"), but store the ID */}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+  <Card className="w-full max-w-2xl mx-auto">
+    <CardHeader>
+      <CardTitle>Ajouter une Nouvelle Variante</CardTitle>
+      <CardDescription>Remplissez le formulaire pour créer une nouvelle variante de produit.</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <form className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {attributes.map((attribute) => (
+            <div key={attribute.id} className="space-y-2">
+              <Label htmlFor={attribute.name.toLowerCase()} className="text-sm font-medium">
+                {attribute.name}
+              </Label>
+              <Select
+                onValueChange={(value) => {
+                  onVariantChange("attributes", value, attributes);
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={`Sélectionnez ${attribute.name}`} />
+                </SelectTrigger>
+                <SelectContent>
+                  {attribute.values.map((attrValue) => (
+                    <SelectItem key={attrValue.id} value={attrValue.id}>
+                      {attrValue.value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-    <div className="grid gap-2">
-      <Label htmlFor="quantity">Quantité</Label>
-      <Input
-        id="quantity"
-        type="number"
-        value={newVariant.quantity || 1}
-        onChange={(e) => onVariantChange("quantity", parseInt(e.target.value), attributes)}
-      />
-    </div>
-    <Button onClick={onAddVariant} type="button">Ajouter une Variante</Button>
-  </form>
+        <div className="space-y-2">
+          <Label htmlFor="quantity" className="text-sm font-medium">Quantité</Label>
+          <Input
+            id="quantity"
+            type="number"
+            value={newVariant.quantity || 1}
+            onChange={(e) => onVariantChange("quantity", parseInt(e.target.value), attributes)}
+            className="w-full"
+          />
+        </div>
+      </form>
+    </CardContent>
+    <CardFooter>
+      <Button onClick={onAddVariant} type="button" className="w-full">
+        <PlusCircle className="mr-2 h-4 w-4" /> Ajouter une Variante
+      </Button>
+    </CardFooter>
+  </Card>
 );
 
 export default VariantForm;
