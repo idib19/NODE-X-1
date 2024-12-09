@@ -32,8 +32,10 @@ const ProductPage = async ({
   // Fetch the variants for the product
   const variants = await getVariantsForProduct(params.productId);
 
-  // Fetch the attributes for the store
+  // Fetch the attributes for the store will return only sizes attributes
   const attributes = await getAttributesByStoreId(params.storeId);
+
+  console.log(attributes);
 
 
   return (

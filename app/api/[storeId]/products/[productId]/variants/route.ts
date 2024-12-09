@@ -53,6 +53,14 @@ export async function POST(req: Request, { params }: { params: { productId: stri
 export async function GET(req: Request, { params }: { params: { productId: string } }) {
   const { productId } = params;
 
+  // instead of directly querying the database in the api. we can create a service to handle the logic
+  // and then call the service from the api
+  // that way we can add more logic and implement other features relying on the variants without modifying the api
+  // or the underlying data model and fetching logic.
+  // everytime we migth be fetching the variant of a product but for different purposes. all the time we dont need 
+  // the same data or the same level of details, so will use the service fuction that will be more adapted to the 
+  // specific needs.
+
   try {
     const variants = await prismadb.variant.findMany({
       where: { productId },

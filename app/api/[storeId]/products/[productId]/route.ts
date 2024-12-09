@@ -8,10 +8,12 @@ export async function GET(
   { params }: { params: { productId: string } }
 ) {
   try {
+    // Check if productId is provided
     if (!params.productId) {
       return new NextResponse("Product id is required", { status: 400 });
     }
 
+    // Fetch product with related data
     const product = await prismadb.product.findUnique({
       where: {
         id: params.productId
@@ -19,11 +21,48 @@ export async function GET(
       include: {
         images: true,
         category: true,
-        
-      }
+        variants: {
+          select: {
+            stockQuantity: true,
+            attributes: {
+              select: {
+                attributeValue: {
+                  select: {
+                    name: true,
+                    value: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
 
-    return NextResponse.json(product);
+    // Check if product exists
+    if (!product) {
+      return new NextResponse("Product not found", { status: 404 });
+    }
+
+    // Transform product data
+    // const transformedProduct = {
+    //   id: product.id,
+    //   name: product.name,
+    //   description: product.description,
+    //   price: parseFloat(product.price.toString()),
+    //   category: product.category.name,
+    //   mainImage: product.images.length > 0 ? product.images[0].url : null,
+    //   sizes: product.variants.flatMap(variant => 
+    //     variant.attributes.map(attribute => ({
+    //       name: attribute.attributeValue.name,
+    //       value: attribute.attributeValue.value,
+    //       stock: variant.stockQuantity
+    //     }))
+    //   )
+    // };
+
+    // Return the transformed product data
+    return NextResponse.json(JSON.stringify(product));
   } catch (error) {
     console.log('[PRODUCT_GET]', error);
     return new NextResponse("Internal error", { status: 500 });
@@ -165,3 +204,4 @@ export async function PATCH(
     return new NextResponse("Internal error", { status: 500 });
   }
 };
+
