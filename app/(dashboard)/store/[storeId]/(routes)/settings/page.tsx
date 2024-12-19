@@ -12,7 +12,7 @@ interface SettingsPageProps {
 // Ce fichier page.tsx represente le composant principal qui sera rendu lors de l'acces a la route/page storeId/settings
 const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
 
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
         redirect('/sign-in')

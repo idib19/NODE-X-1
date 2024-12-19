@@ -3,8 +3,10 @@
 import axios from "axios";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { toast } from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
+import debounce from "lodash/debounce";
 
 import { AlertModal } from "@/components/modals/alert-modals";
 import { Button } from "@/components/ui/button";
@@ -25,29 +27,56 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({
   data,
 }) => {
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const params = useParams();
 
-  const onConfirm = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/${params.storeId}/orders/${data.id}`);
+  // Use React Query for better mutation handling
+  const { mutate: deleteOrder, isPending } = useMutation({
+    mutationFn: async () => {
+      return axios.delete(`/api/${params.storeId}/orders/${data.id}`);
+    },
+    onSuccess: () => {
       toast.success('Commande supprime.');
-      router.refresh();
-    } catch (error) {
-      toast.error('Une erreur est survenue');
-    } finally {
-      setLoading(false);
       setOpen(false);
+      // Use setTimeout to prevent immediate state updates
+      setTimeout(() => {
+        router.refresh();
+      }, 100);
+    },
+    onError: () => {
+      toast.error('Une erreur est survenue');
+    }
+  });
+
+  // Debounce the confirmation handler
+  const debouncedOnConfirm = useCallback(
+    debounce(() => {
+      deleteOrder();
+    }, 300),
+    [deleteOrder]
+  );
+
+  const onConfirm = async () => {
+    if (!isPending) {
+      debouncedOnConfirm();
     }
   };
 
-  const onCopy = (id: string) => {
+  // Configure toast with options to prevent excessive re-renders
+  const showToast = useCallback((message: string, type: 'success' | 'error') => {
+    toast(message, {
+      duration: 2000,
+      position: 'top-center',
+      // Prevent multiple toasts from stacking
+      id: 'order-action-toast',
+    });
+  }, []);
+
+  const onCopy = useCallback((id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success('Id de commande copiée dans le presse papier.');
-  }
+    showToast('Id de commande copiée dans le presse papier.', 'success');
+  }, [showToast]);
 
   return (
     <>
@@ -55,7 +84,7 @@ export const CellAction: React.FC<CellActionProps> = ({
         isOpen={open} 
         onClose={() => setOpen(false)}
         onConfirm={onConfirm}
-        loading={loading}
+        loading={isPending}
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

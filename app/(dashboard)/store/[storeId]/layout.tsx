@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import { checkPermission } from "@/permissions/checkStorePermission";
 import { CurrencyProvider } from "@/providers/currencyContext";
 export default async function DashboardLayout({ children, params }: { children: React.ReactNode; params: { storeId: string } }) {
-    const { userId } = auth();
+    const { userId } = await auth();
 
     // Redirect to sign-in if no user ID is found
     if (!userId) {

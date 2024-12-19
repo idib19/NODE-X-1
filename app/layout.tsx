@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import QueryProvider from '@/components/providers/query-provider'
 
 //components-personnal imports
 import { ModalProvider } from '@/providers/modal-provider'
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
   description: 'Admin Dashboard',
 }
 
+const queryClient = new QueryClient()
+
 export default function RootLayout({
   children,
 }: {
@@ -28,26 +31,28 @@ export default function RootLayout({
 
     <ClerkProvider>
 
-      
-        <html lang="en">
+
+        <html lang="en" suppressHydrationWarning>
 
           <body className={inter.className}>
-            
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
+            <QueryProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
             >
               <ToasterProvider />
                 <ModalProvider />
                 {children}
 
             </ThemeProvider>
+            </QueryProvider>
           </body>
 
         </html>
-
-
+   
+  
     </ClerkProvider>
 
   )

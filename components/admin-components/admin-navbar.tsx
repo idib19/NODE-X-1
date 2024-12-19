@@ -11,7 +11,7 @@ import { data } from "autoprefixer";
 
 const adminNavbar = async () => {
 
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
         redirect("/sign-in");

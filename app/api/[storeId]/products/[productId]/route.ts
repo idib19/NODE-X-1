@@ -102,10 +102,64 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const product = await prismadb.product.delete({
+    // First, fetch the product to get all related IDs
+    const product = await prismadb.product.findUnique({
       where: {
         id: params.productId
       },
+      include: {
+        variants: {
+          include: {
+            attributes: true
+          }
+        },
+        orderItems: true,
+        images: true
+      }
+    });
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    // Delete in correct order to respect foreign key constraints
+    await prismadb.$transaction(async (tx) => {
+      // 1. Delete VariantAttributes for all variants
+      for (const variant of product.variants) {
+        await tx.variantAttribute.deleteMany({
+          where: {
+            variantId: variant.id
+          }
+        });
+      }
+
+      // 2. Delete all Variants
+      await tx.variant.deleteMany({
+        where: {
+          productId: params.productId
+        }
+      });
+
+      // 3. Delete all OrderItems
+      await tx.orderItem.deleteMany({
+        where: {
+          productId: params.productId
+        }
+      });
+
+      // 4. Delete all Images
+      await tx.image.deleteMany({
+        where: {
+          productId: params.productId
+        }
+      });
+
+      // 5. Finally delete the product
+      await tx.product.delete({
+        where: {
+          id: params.productId
+        }
+      });
     });
 
     return NextResponse.json(product);

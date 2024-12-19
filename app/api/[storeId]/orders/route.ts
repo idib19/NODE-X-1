@@ -44,6 +44,34 @@ export async function POST(
   }
 };
 
+export async function GET(
+  req: Request,
+  { params }: { params: { storeId: string } }
+) {
+  try {
+    const orders = await prismadb.order.findMany({
+      where: {
+        storeId: params.storeId
+      },
+      include: {
+        orderItems: {
+          include: {
+            product: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+
+    return NextResponse.json(orders);
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
+  }
+}
+
+
 // Function to calculate total price remains unchanged
 const calculateTotalPrice = (order: any) => {
   return order.orderItems.reduce((total: any, item: any) => {

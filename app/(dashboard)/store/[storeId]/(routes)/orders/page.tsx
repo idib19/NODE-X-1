@@ -9,9 +9,8 @@ const OrdersPage = async ({
 }: {
   params: { storeId: string }
 }) => {
+  const response = await fetch(`/api/stores/${params.storeId}/orders`);
 
-  // HERE MY CLIENTS KNOWS ABOUT THE DATABASE !!!!!! BAD !! NEEDS TO CHANGE THAT TO RESPECT A GOOD ARCHITECTURE
-  // WE WILL CALL AN INTERFACE ADAPTER OR A USE CASE THAT WILL FETCH TO API/ORDERS/GET-ALL-STORE-ORDERS
   const orders = await prismadb.order.findMany({
     where: {
       storeId: params.storeId
