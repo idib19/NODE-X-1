@@ -4,12 +4,13 @@ import prismadb from "@/lib/prismadb";
 import { OrderColumn } from "./components/columns"
 import { OrderClient } from "./components/client";
 
-const OrdersPage = async ({
-  params
-}: {
-  params: { storeId: string }
-}) => {
-  const response = await fetch(`/api/stores/${params.storeId}/orders`);
+const OrdersPage = async (
+  props: {
+    params: Promise<{ storeId: string }>
+  }
+) => {
+  const params = await props.params;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`);
 
   const orders = await prismadb.order.findMany({
     where: {
@@ -28,7 +29,7 @@ const OrdersPage = async ({
   });
 
 
-  
+
   const calculateTotalPrice = (orderItems: any[]) => {
     return orderItems.reduce((total, item) => {
       return total + Number(item.product.price.mul(item.quantity))

@@ -3,11 +3,12 @@ import { OrderDetails } from "./components/orderDetails";
 
 import { OrderStatusProvider } from '@/providers/utils/orderStatusProvider'
 
-const OrderDetailsPage = async ({
-  params
-}: {
-  params: { orderId: string }
-}) => {
+const OrderDetailsPage = async (
+  props: {
+    params: Promise<{ orderId: string }>
+  }
+) => {
+  const params = await props.params;
 
   // get specific order data
   // BAD ARCHITECTURE HERE !! UI SHOULD NOT KNOW ABOUT DB !

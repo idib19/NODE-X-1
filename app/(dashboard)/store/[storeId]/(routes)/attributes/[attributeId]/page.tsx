@@ -1,11 +1,12 @@
 import prismadb from "@/lib/prismadb";
 import { AttributeForm } from "./components/attribute-form";
 
-const AttributePage = async ({
-  params
-}: {
-  params: { attributeId: string }
-}) => {
+const AttributePage = async (
+  props: {
+    params: Promise<{ attributeId: string }>
+  }
+) => {
+  const params = await props.params;
   const attribute = await prismadb.attribute.findUnique({
     where: {
       id: params.attributeId

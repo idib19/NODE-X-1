@@ -1,0 +1,4 @@
+issues 1 : 
+all authentication checks are done separately in a lot of file,
+we need to create a middleware to check the authentication and authorization at leats centralise the authentication checks
+

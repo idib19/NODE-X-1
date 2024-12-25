@@ -6,11 +6,12 @@ import { convertPriceToNumber } from "@/providers/utils/convertDecimalToNumber";
 import { getAttributesByStoreId } from "@/models/product-management/attributes/get-attribute-per-store";
 
 
-const ProductPage = async ({
-  params
-}: {
-  params: { productId: string, storeId: string }
-}) => {
+const ProductPage = async (
+  props: {
+    params: Promise<{ productId: string, storeId: string }>
+  }
+) => {
+  const params = await props.params;
 
   // Fetch the product details using service 
   const product = convertPriceToNumber(await prismadb.product.findUnique({

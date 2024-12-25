@@ -15,9 +15,8 @@ interface DashboardPageProps {
     };
 };
 
-const DashboardPage: React.FC<DashboardPageProps> = async ({
-    params
-}) => {
+const DashboardPage: React.FC<DashboardPageProps> = async props => {
+    const params = await props.params;
     const totalRevenue = await getTotalRevenue(params.storeId);
     const graphRevenue = await getGraphRevenue(params.storeId);
     const salesCount = await getSalesCount(params.storeId);

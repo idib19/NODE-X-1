@@ -4,9 +4,10 @@ import prismadb from '@/lib/prismadb';
 import { validateRequestAndAuthorize } from '@/permissions/checkStorePermission';
 import validator from 'validator';
 
-export async function POST(req: Request, { params }: { params: { storeId: string } }) {
+export async function POST(req: Request, props: { params: Promise<{ storeId: string }> }) {
+  const params = await props.params;
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const validateRequest = await validateRequestAndAuthorize(params.storeId, userId!, params.storeId)
 
     if (validateRequest.error) {
@@ -75,10 +76,8 @@ export async function POST(req: Request, { params }: { params: { storeId: string
 
 
 
-export async function GET(
-  req: Request,
-  { params }: { params: { storeId: string } },
-) {
+export async function GET(req: Request, props: { params: Promise<{ storeId: string }> }) {
+  const params = await props.params;
   try {
     const { searchParams } = new URL(req.url)
     const categoryId = searchParams.get('categoryId') || undefined;

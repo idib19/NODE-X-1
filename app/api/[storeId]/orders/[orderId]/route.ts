@@ -11,10 +11,8 @@ const calculateTotalPrice = (order: any) => {
     }, 0);
 };
 
-export async function GET(
-    req: Request,
-    { params }: { params: { orderId: string } }
-) {
+export async function GET(req: Request, props: { params: Promise<{ orderId: string }> }) {
+    const params = await props.params;
     try {
         if (!params.orderId) {
             return new NextResponse("Order id is required", { status: 400 });
@@ -54,10 +52,11 @@ export async function GET(
 
 export async function DELETE(
     req: Request,
-    { params }: { params: { orderId: string, storeId: string } }
+    props: { params: Promise<{ orderId: string, storeId: string }> }
 ) {
+    const params = await props.params;
     try {
-        const { userId } = auth();
+        const { userId } = await auth();
         const storeId = params.storeId
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 403 });

@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
 import prismadb from '@/lib/prismadb';
 
-export async function GET(
-    req: Request,
-    { params }: { params: { storeId: string } }
-) {
+export async function GET(req: Request, props: { params: Promise<{ storeId: string }> }) {
+    const params = await props.params;
     const storeId = params.storeId;
 
     try {
@@ -34,6 +32,5 @@ export async function GET(
             { status: 500 }
         );
     }
-
 }
 

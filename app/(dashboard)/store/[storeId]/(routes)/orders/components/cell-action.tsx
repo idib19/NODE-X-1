@@ -34,7 +34,7 @@ export const CellAction: React.FC<CellActionProps> = ({
   // Use React Query for better mutation handling
   const { mutate: deleteOrder, isPending } = useMutation({
     mutationFn: async () => {
-      return axios.delete(`/api/${params.storeId}/orders/${data.id}`);
+      return axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/orders/${data.id}`);
     },
     onSuccess: () => {
       toast.success('Commande supprime.');

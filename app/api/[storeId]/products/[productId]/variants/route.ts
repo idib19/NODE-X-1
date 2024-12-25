@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import prismadb from '@/lib/prismadb';
 
-export async function POST(req: Request, { params }: { params: { productId: string } }) {
-  
+export async function POST(req: Request, props: { params: Promise<{ productId: string }> }) {
+  const params = await props.params;
+
   const body = await req.json();
-  
+
   const { productId } = params;
 
   // validate the request body
@@ -50,7 +51,8 @@ export async function POST(req: Request, { params }: { params: { productId: stri
 }
 
 
-export async function GET(req: Request, { params }: { params: { productId: string } }) {
+export async function GET(req: Request, props: { params: Promise<{ productId: string }> }) {
+  const params = await props.params;
   const { productId } = params;
 
   // instead of directly querying the database in the api. we can create a service to handle the logic
@@ -86,7 +88,8 @@ export async function GET(req: Request, { params }: { params: { productId: strin
 
 // This handler is to delete all variants for a specific product  
 // it first deletes all the variant attributes and then the variants themselves because of the onDelete cascade
-export async function DELETE(req: Request, { params }: { params: { productId: string } }) {
+export async function DELETE(req: Request, props: { params: Promise<{ productId: string }> }) {
+  const params = await props.params;
 
   const { productId } = params;
 

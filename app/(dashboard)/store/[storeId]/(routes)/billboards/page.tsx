@@ -4,7 +4,8 @@ import { BillboardClient } from "./components/client";
 import format from "date-fns/format";
 import { BillboardColumn } from "./components/columns";
 
-const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
+const BillboardsPage = async (props: { params: Promise<{ storeId: string }> }) => {
+    const params = await props.params;
 
     const billboards = await prismadb.billboard.findMany({
         where : {

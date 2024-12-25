@@ -5,10 +5,8 @@ import { auth } from "@clerk/nextjs/server";
 import { validateRequestAndAuthorize } from "@/permissions/checkStorePermission";
 import validator from 'validator';
 
-export async function GET(
-  req: Request,
-  { params }: { params: { attributeId: string } }
-) {
+export async function GET(req: Request, props: { params: Promise<{ attributeId: string }> }) {
+  const params = await props.params;
   try {
     if (!params.attributeId) {
       return new NextResponse("attribute id is required", { status: 400 });
@@ -26,16 +24,16 @@ export async function GET(
     console.log('[attribute_GET]', error);
     return new NextResponse("Internal error", { status: 500 });
   }
-  
 };
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { attributeId: string, storeId: string } }
+  props: { params: Promise<{ attributeId: string, storeId: string }> }
 ) {
+  const params = await props.params;
   try {
     // Authentication check
-    const { userId } = auth();
+    const { userId } = await auth();
 
     const validateRequest = await validateRequestAndAuthorize(params.storeId, userId!, params.attributeId)
 

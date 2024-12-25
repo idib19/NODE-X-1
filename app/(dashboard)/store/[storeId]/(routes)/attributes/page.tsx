@@ -5,11 +5,12 @@ import prismadb from "@/lib/prismadb";
 import { AttributeColumn } from "./components/columns"
 import { AttributesClient } from "./components/client";
 
-const SizesPage = async ({
-  params
-}: {
-  params: { storeId: string }
-}) => {
+const SizesPage = async (
+  props: {
+    params: Promise<{ storeId: string }>
+  }
+) => {
+  const params = await props.params;
   // violation of the de dependency inversion principle DIP 
   // source code dependencies should not refer to concrete modules 
   const attributes = await prismadb.attribute.findMany({

@@ -14,10 +14,8 @@ const validateInput = (userId: string, storeId: string) => {
   if (!validator.isUUID(storeId)) throw new Error("Invalid Store ID format");
 };
 
-export async function POST(
-  req: Request,
-  { params }: { params: { storeId: string } },
-) {
+export async function POST(req: Request, props: { params: Promise<{ storeId: string }> }) {
+  const params = await props.params;
   try {
     const { userId } = await req.json();
     validateInput(userId, params.storeId);
@@ -44,10 +42,8 @@ export async function POST(
   }
 };
 
-export async function GET(
-  req: Request,
-  { params }: { params: { storeId: string } }
-) {
+export async function GET(req: Request, props: { params: Promise<{ storeId: string }> }) {
+  const params = await props.params;
   try {
     const orders = await prismadb.order.findMany({
       where: {

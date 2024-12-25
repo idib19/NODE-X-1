@@ -5,7 +5,8 @@ export async function OPTIONS() {
     return NextResponse.json("ok", { status: 200 });
 }
 
-export async function POST(req: Request, { params }: { params: { storeId: string } }) {
+export async function POST(req: Request, props: { params: Promise<{ storeId: string }> }) {
+    const params = await props.params;
     try {
         const { orderItemsData, data, clientId } = await req.json();
 

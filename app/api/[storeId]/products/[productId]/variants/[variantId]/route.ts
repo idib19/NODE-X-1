@@ -3,7 +3,11 @@ import prismadb from '@/lib/prismadb';
 
 
 // This handler is to delete a specific variant for a specific product
-export async function DELETE(req: Request, { params }: { params: { productId: string; variantId: string } }) {
+export async function DELETE(
+  req: Request,
+  props: { params: Promise<{ productId: string; variantId: string }> }
+) {
+  const params = await props.params;
   const { variantId } = params;
 
   try {

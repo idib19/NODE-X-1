@@ -5,7 +5,13 @@ import Navbar from "@/components/navbar";
 import { NextResponse } from "next/server";
 import { checkPermission } from "@/permissions/checkStorePermission";
 import { CurrencyProvider } from "@/providers/currencyContext";
-export default async function DashboardLayout({ children, params }: { children: React.ReactNode; params: { storeId: string } }) {
+export default async function DashboardLayout(props: { children: React.ReactNode; params: Promise<{ storeId: string }> }) {
+    const params = await props.params;
+
+    const {
+        children
+    } = props;
+
     const { userId } = await auth();
 
     // Redirect to sign-in if no user ID is found

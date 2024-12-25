@@ -4,10 +4,8 @@ import { auth } from "@clerk/nextjs/server";
 import prismadb from "@/lib/prismadb";
 
 
-export async function GET(
-    req: Request,
-    { params }: { params: { billboardId: string } }
-) {
+export async function GET(req: Request, props: { params: Promise<{ billboardId: string }> }) {
+    const params = await props.params;
     try {
 
         if (!params.billboardId) {
@@ -29,10 +27,11 @@ export async function GET(
 
 export async function PATCH(
     req: Request,
-    { params }: { params: { storeId: string, billboardId: string } }
+    props: { params: Promise<{ storeId: string, billboardId: string }> }
 ) {
+    const params = await props.params;
     try {
-        const { userId } = auth();
+        const { userId } = await auth();
         const body = await req.json();
 
         const { label, imageUrl } = body;
@@ -89,10 +88,11 @@ export async function PATCH(
 
 export async function DELETE(
     req: Request,
-    { params }: { params: { storeId: string, billboardId: string } }
+    props: { params: Promise<{ storeId: string, billboardId: string }> }
 ) {
+    const params = await props.params;
     try {
-        const { userId } = auth();
+        const { userId } = await auth();
 
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 403 });

@@ -2,35 +2,31 @@ import { NextResponse } from 'next/server';
 import prismadb from '@/lib/prismadb';
 
 
-export async function GET(
-  req: Request,
-    { params }: { params: { storeId: string } }
-  ) {
-    try {
-      if (!params?.storeId) {
-        return NextResponse.json("Store id is required", { status: 400 });
-      }
-  
-      const attributes = await prismadb.attribute.findMany({
-        where: {
-          storeId: params.storeId,
-        },
-      });
-  
-      return NextResponse.json(attributes);
-    } catch (error) {
-      console.log('[ATTRIBUTE_GET]', error);
-      return NextResponse.json("Internal error", { status: 500 });
+export async function GET(req: Request, props: { params: Promise<{ storeId: string }> }) {
+  const params = await props.params;
+  try {
+    if (!params?.storeId) {
+      return NextResponse.json("Store id is required", { status: 400 });
     }
+
+    const attributes = await prismadb.attribute.findMany({
+      where: {
+        storeId: params.storeId,
+      },
+    });
+
+    return NextResponse.json(attributes);
+  } catch (error) {
+    console.log('[ATTRIBUTE_GET]', error);
+    return NextResponse.json("Internal error", { status: 500 });
   }
+}
 
   
 
 
-export async function POST(
-  req: Request,
-  { params }: { params: { storeId: string } }
-) {
+export async function POST(req: Request, props: { params: Promise<{ storeId: string }> }) {
+  const params = await props.params;
   try {
     // const { userId } = auth();
 

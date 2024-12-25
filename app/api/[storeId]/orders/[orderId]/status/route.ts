@@ -5,7 +5,11 @@ import prismadb from "@/lib/prismadb";
 import { isAuthorised } from "@/permissions/checkStorePermission"; // need to check that before allowing UPDATE requests on order's status 
 import { Console } from "console";
 
-export async function GET(req: Request, { params }: { params: { orderId: string, storeId: string } }) {
+export async function GET(
+    req: Request,
+    props: { params: Promise<{ orderId: string, storeId: string }> }
+) {
+    const params = await props.params;
 
     const { orderId, storeId } = params
 
@@ -35,7 +39,11 @@ export async function GET(req: Request, { params }: { params: { orderId: string,
 
 
 
-export async function PATCH(req: Request, { params }: { params: { orderId: string, storeId: string } }) {
+export async function PATCH(
+    req: Request,
+    props: { params: Promise<{ orderId: string, storeId: string }> }
+) {
+    const params = await props.params;
 
     const { orderId, storeId } = params;
     const status = await req.json();
