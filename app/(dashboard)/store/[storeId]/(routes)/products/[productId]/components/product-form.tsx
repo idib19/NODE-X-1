@@ -93,7 +93,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   });
 
   const onSubmit = async (data: ProductFormValues) => {
+    console.log("about to submit");
     try {
+      console.log("submitting");
       setLoading(true);
       if (initialData) {
         await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/products/${params.productId}`, data);

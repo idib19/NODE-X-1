@@ -34,9 +34,9 @@ const ProductPage = async (
   const variants = await getVariantsForProduct(params.productId);
 
   // Fetch the attributes for the store will return only sizes attributes
-  const attributes = await getAttributesByStoreId(params.storeId);
+//  const attributes = await getAttributesByStoreId(params.storeId);
 
-  console.log(attributes);
+  //console.log(attributes);
 
 
   return (
@@ -46,7 +46,7 @@ const ProductPage = async (
           categories={categories}
           initialData={product}
         />
-          <ProductVariant attributes={attributes}/>
+          {/* <ProductVariant attributes={attributes}/> */}
       </div>
     </div>
   );
